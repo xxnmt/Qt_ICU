@@ -41,34 +41,19 @@ ECGTest_Dialog::~ECGTest_Dialog()
 
 void ECGTest_Dialog::readECGFile(QString FileName)
 {
-    QFile file(FileName);
-    if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Failed to open file:" << FileName;
-        return;
-    }
-    
-    QByteArray jsonData = file.readAll();
-    file.close();
-    
-    QJsonDocument doc = QJsonDocument::fromJson(jsonData);
-    if (doc.isArray()) {
-        User_DataArr = doc.array();
-    }
-    
     int cols =2,rows =6;
     for(int col=0;col<cols;col++)
     {
         for(int row=0;row<rows;row++)
         {
             Heart_Data *tmpHeartData = new Heart_Data();
-            if (col*rows+row < User_DataArr.size()) {
-                QJsonObject edata = User_DataArr.at(col*rows+row).toObject();
-                QString channelName =edata["channel"].toString();
-                QJsonArray dataArr = edata["value"].toArray();
+            QJsonObject edata = User_DataArr.at(col*rows+row).toObject();
+            QString channelName =edata["channel"].toString();
+            QJsonArray dataArr = edata["value"].toArray();
 
-                tmpHeartData->setChannelName(channelName);
-                tmpHeartData->setDataArr(dataArr);
-            }
+            tmpHeartData->setChannelName(channelName);
+            tmpHeartData->setDataArr(dataArr);
+
             User_ChannelData[col*rows+row] = tmpHeartData;
 
         }
@@ -84,14 +69,13 @@ void ECGTest_Dialog::getHistoryData()
         for(int row=0;row<rows;row++)
         {
             Heart_Data *tmpHeartData = new Heart_Data();
-            if (col*rows+row < User_DataArr.size()) {
-                QJsonObject edata = User_DataArr.at(col*rows+row).toObject();
-                QString channelName =edata["channel"].toString();
-                QJsonArray dataArr = edata["value"].toArray();
+            QJsonObject edata = User_DataArr.at(col*rows+row).toObject();
+            QString channelName =edata["channel"].toString();
+            QJsonArray dataArr = edata["value"].toArray();
 
-                tmpHeartData->setChannelName(channelName);
-                tmpHeartData->setDataArr(dataArr);
-            }
+            tmpHeartData->setChannelName(channelName);
+            tmpHeartData->setDataArr(dataArr);
+
             User_ChannelData[col*rows+row] = tmpHeartData;
 
         }
@@ -149,10 +133,9 @@ void ECGTest_Dialog::drawHisECGWave(QPainter &painter, int width, int height, do
 
     for(int i=0;i<12;i++)
     {
-        if(i < User_newdata.size()) {
-            QString data = QString::fromLocal8Bit(User_newdata.at(i));
-            User_ChannelData[i]->addData(data.toInt());
-        }
+        QString data = QString::fromLocal8Bit(User_newdata.at(i));
+        User_ChannelData[i]->addData(data.toInt());
+
     }
     painter.save();
     float fpPerMv = 10*dots;
