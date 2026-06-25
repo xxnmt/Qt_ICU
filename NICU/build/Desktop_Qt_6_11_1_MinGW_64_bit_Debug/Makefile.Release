@@ -129,6 +129,7 @@ compiler_rcc_clean:
 	-$(DEL_FILE) release\qrc_Resource.cpp
 release/qrc_Resource.cpp: ../../Resource.qrc \
 		D:/QT/6.11.1/mingw_64/bin/rcc.exe \
+		../../../resource/heartData/hisdata.txt \
 		../../../resource/images/resource.qrc \
 		../../../resource/images/breathimg.png \
 		../../../resource/images/hospitalback.jpg \
@@ -145,8 +146,7 @@ release/qrc_Resource.cpp: ../../Resource.qrc \
 		../../../resource/images/lock.png \
 		../../../resource/images/danger.png \
 		../../../resource/images/databack.jpg \
-		../../../resource/images/mainbanner.png \
-		../../../resource/heartData/hisdata.txt
+		../../../resource/images/mainbanner.png
 	D:\QT\6.11.1\mingw_64\bin\rcc.exe -name Resource --no-zstd ..\..\Resource.qrc -o release\qrc_Resource.cpp
 
 compiler_moc_predefs_make_all: release/moc_predefs.h
@@ -372,7 +372,7 @@ release/moc_ecgtest_dialog.cpp: ../../ecgtest_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/qjsondocument.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/qjsonparseerror.h \
 		../../heart_data.h \
-		D:/QT/6.11.1/mingw_64/include/QtCore/qstring \
+		D:/QT/6.11.1/mingw_64/include/QtCore/QString \
 		../../serial_tool.h \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/QSerialPort \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qserialport.h \
@@ -610,7 +610,7 @@ release/moc_main_dialog.cpp: ../../main_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/qjsondocument.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/qjsonparseerror.h \
 		../../heart_data.h \
-		D:/QT/6.11.1/mingw_64/include/QtCore/qstring \
+		D:/QT/6.11.1/mingw_64/include/QtCore/QString \
 		../../serial_tool.h \
 		release/moc_predefs.h \
 		D:/QT/6.11.1/mingw_64/bin/moc.exe
@@ -1089,7 +1089,7 @@ release/ecgtest_dialog.o: ../../ecgtest_dialog.cpp D:/QT/6.11.1/mingw_64/include
 		D:/QT/6.11.1/mingw_64/include/QtCore/QJsonArray \
 		D:/QT/6.11.1/mingw_64/include/QtCore/qjsonarray.h \
 		../../heart_data.h \
-		D:/QT/6.11.1/mingw_64/include/QtCore/qstring \
+		D:/QT/6.11.1/mingw_64/include/QtCore/QString \
 		../../serial_tool.h \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/QSerialPort \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qserialport.h \
@@ -1111,12 +1111,11 @@ release/ecgtest_dialog.o: ../../ecgtest_dialog.cpp D:/QT/6.11.1/mingw_64/include
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/QPushButton \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/qpushbutton.h \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/qabstractbutton.h \
-		../../user_data.h \
-		D:/QT/6.11.1/mingw_64/include/QtCore/QString
+		../../user_data.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\ecgtest_dialog.o ..\..\ecgtest_dialog.cpp
 
 release/heart_data.o: ../../heart_data.cpp ../../heart_data.h \
-		D:/QT/6.11.1/mingw_64/include/QtCore/qstring \
+		D:/QT/6.11.1/mingw_64/include/QtCore/QString \
 		D:/QT/6.11.1/mingw_64/include/QtCore/qstring.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/qchar.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/qglobal.h \
@@ -1482,7 +1481,7 @@ release/main.o: ../../main.cpp ../../main_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/qjsondocument.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/qjsonparseerror.h \
 		../../heart_data.h \
-		D:/QT/6.11.1/mingw_64/include/QtCore/qstring \
+		D:/QT/6.11.1/mingw_64/include/QtCore/QString \
 		../../serial_tool.h \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/QApplication \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/qapplication.h
@@ -1712,7 +1711,7 @@ release/main_dialog.o: ../../main_dialog.cpp ../../main_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/qjsondocument.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/qjsonparseerror.h \
 		../../heart_data.h \
-		D:/QT/6.11.1/mingw_64/include/QtCore/qstring \
+		D:/QT/6.11.1/mingw_64/include/QtCore/QString \
 		../../serial_tool.h \
 		ui_main_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/QVariant \

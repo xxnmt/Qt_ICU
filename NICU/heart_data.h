@@ -1,7 +1,7 @@
 #ifndef HEART_DATA_H
 #define HEART_DATA_H
 
-#include<qstring>
+#include<QString>
 #include<QJsonArray>
 
 class Heart_Data

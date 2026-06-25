@@ -12,26 +12,26 @@
 
 
 #define DOTS 5
-
-User_Data user(QString::fromLocal8Bit("张依然"),25);
+int p=0;
+User_Data user(QString::fromUtf8("张依然"),25);
 
 ECGTest_Dialog::ECGTest_Dialog(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::ECGTest_Dialog)
 {
     ui->setupUi(this);
-    setWindowTitle(QString::fromLocal8Bit("心电图"));
+    setWindowTitle(QString::fromUtf8("心电图"));
     setWindowFlags(Qt::FramelessWindowHint);
 
-    ui->label_UserAge->setText(QString::number(user.getAge()));
-    ui->label_UserName->setText(user.getName());
+   ui->label_UserAge->setText(QString::number(user.getAge()));
+   ui->label_UserName->setText(user.getName());
 
-    QString fileName = ":/resource/heartData/hisdata.txt";
-    User_serialflag = false;
+   QString fileName = ":/hisdata";
+   User_serialflag = false;
 
-    readECGFile(fileName);
+   readECGFile(fileName);
 
-    serialPortInit();
+   serialPortInit();
 }
 
 ECGTest_Dialog::~ECGTest_Dialog()
@@ -41,24 +41,18 @@ ECGTest_Dialog::~ECGTest_Dialog()
 
 void ECGTest_Dialog::readECGFile(QString FileName)
 {
-    int cols =2,rows =6;
-    for(int col=0;col<cols;col++)
-    {
-        for(int row=0;row<rows;row++)
-        {
-            Heart_Data *tmpHeartData = new Heart_Data();
-            QJsonObject edata = User_DataArr.at(col*rows+row).toObject();
-            QString channelName =edata["channel"].toString();
-            QJsonArray dataArr = edata["value"].toArray();
-
-            tmpHeartData->setChannelName(channelName);
-            tmpHeartData->setDataArr(dataArr);
-
-            User_ChannelData[col*rows+row] = tmpHeartData;
-
-        }
-
+    QFile f(FileName);
+    if(!f.open(QIODevice::ReadOnly|QIODevice::Text)){
+        qDebug()<<"file open fail";
+        return;
     }
+    QByteArray content = f.readAll();
+    User_DataArr = QJsonDocument::fromJson(content).array();
+    //
+    qDebug()<<"hisdata:"<<User_DataArr;
+
+    getHistoryData();
+
 }
 
 void ECGTest_Dialog::getHistoryData()
@@ -70,7 +64,7 @@ void ECGTest_Dialog::getHistoryData()
         {
             Heart_Data *tmpHeartData = new Heart_Data();
             QJsonObject edata = User_DataArr.at(col*rows+row).toObject();
-            QString channelName =edata["channel"].toString();
+            QString channelName = edata["channel"].toString();
             QJsonArray dataArr = edata["value"].toArray();
 
             tmpHeartData->setChannelName(channelName);
@@ -126,20 +120,11 @@ void ECGTest_Dialog::drawECGGrid(QPainter &painter, int width, int height, doubl
 
 void ECGTest_Dialog::drawHisECGWave(QPainter &painter, int width, int height, double dots)
 {
-    QPixmap *pixmap = new QPixmap(this->size());
-    pixmap->fill(Qt::white);
-    painter.drawPixmap(0,0,*pixmap,0,0,0,0);
-    drawECGGrid(painter,width,height,dots);
-
-    for(int i=0;i<12;i++)
-    {
-        QString data = QString::fromLocal8Bit(User_newdata.at(i));
-        User_ChannelData[i]->addData(data.toInt());
-
-    }
+    drawECGGrid(painter,width,height,DOTS);
     painter.save();
-    float fpPerMv = 10*dots;
-    float fpPerUv = 0.001*fpPerMv;
+    float fpPerMv = 10* DOTS;
+    float fpPerUv = fpPerMv/1000;
+
     int rectWidth = width/2;
     int rowHeight = height/6;
     int middleHeight = rowHeight/2;
@@ -149,31 +134,29 @@ void ECGTest_Dialog::drawHisECGWave(QPainter &painter, int width, int height, do
     {
         for(int row=0;row<rows;row++)
         {
-            QString channelName = User_ChannelData[col*rows+row]->getChannelName();
-            QJsonArray dataArr = User_ChannelData[col*rows+row]->getDataArr();
-
-            int wavelength = dataArr.size();
-            QVector<QPointF> vecPoints;
-            for(int i=0;i<wavelength;i++)
+            int wavelen =  User_ChannelData[col*rows+row]->getDataArr().size();
+            QVector<QPoint> vecPoints;
+            QString name = User_ChannelData[col*rows+row]->getChannelName();
+            QJsonArray data = User_ChannelData[col*rows+row]->getDataArr();
+            for(int i=0;i<wavelen;i++)
             {
                 if(i>rectWidth-dots*2)
                     break;
-                QPointF p(col*rectWidth + i,row*rowHeight+middleHeight-dataArr[i].toInt()*fpPerUv+25);
+                QPoint p((qreal)(col*rectWidth+i),(qreal)(row*rowHeight+middleHeight-data[i].toInt()*fpPerUv)+25);
                 vecPoints.append(p);
             }
-
             painter.save();
             painter.setPen(QColor(62,168,115));
-            painter.drawText(col*rectWidth,row*rowHeight+middleHeight+25,channelName);
+            painter.drawText(col*rectWidth,row*rowHeight+middleHeight+25,name);
             painter.restore();
 
-            for(int i=0; i<vecPoints.size()-1;++i)
+            for(int i=0;i<vecPoints.size()-1;i++)
             {
                 painter.drawLine(vecPoints[i],vecPoints[i+1]);
             }
         }
+
     }
-    //qDebug()<<"updateECGWave";
     painter.restore();
 
 }

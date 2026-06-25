@@ -90,7 +90,7 @@ void Serial_Dialog::on_serialControl_clicked()
     {
         m_serialport->clear();
         m_serialport->close();
-        ui->serialControl->setText(QString::fromLocal8Bit("打开串口"));
+        ui->serialControl->setText(QString::fromUtf8("打开串口"));
         ui->label->setStyleSheet("background-color:rgb(255,0,0);border-radius:12px;");
         if(timeIdHeart!=0)
         {
@@ -117,7 +117,7 @@ void Serial_Dialog::on_serialControl_clicked()
         m_serialport->setParity(QSerialPort::NoParity);
         m_serialport->setStopBits(QSerialPort::OneStop);
         m_serialport->open(QIODevice::ReadWrite);
-        ui->serialControl->setText(QString::fromLocal8Bit("关闭串口"));
+        ui->serialControl->setText(QString::fromUtf8("关闭串口"));
         ui->label->setStyleSheet("background-color:rgb(0,255,0);border-radius:12px;");
     }
 }

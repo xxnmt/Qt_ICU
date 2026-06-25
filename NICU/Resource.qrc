@@ -17,6 +17,6 @@
         <file>../resource/images/quit.png</file>
         <file>../resource/images/resource.qrc</file>
         <file>../resource/images/unlock.png</file>
-        <file>../resource/heartData/hisdata.txt</file>
+        <file alias="hisdata">../resource/heartData/hisdata.txt</file>
     </qresource>
 </RCC>

@@ -64,11 +64,11 @@ public:
     void retranslateUi(QDialog *Serial_Dialog)
     {
         Serial_Dialog->setWindowTitle(QCoreApplication::translate("Serial_Dialog", "Dialog", nullptr));
-        hurryBtn->setText(QCoreApplication::translate("Serial_Dialog", "PushButton", nullptr));
-        breathTestBtn->setText(QCoreApplication::translate("Serial_Dialog", "PushButton", nullptr));
-        heartTestBtn->setText(QCoreApplication::translate("Serial_Dialog", "PushButton", nullptr));
-        bloodPressureBtn->setText(QCoreApplication::translate("Serial_Dialog", "PushButton", nullptr));
-        serialControl->setText(QCoreApplication::translate("Serial_Dialog", "PushButton", nullptr));
+        hurryBtn->setText(QCoreApplication::translate("Serial_Dialog", "hurryBtn", nullptr));
+        breathTestBtn->setText(QCoreApplication::translate("Serial_Dialog", "breathTestBtn", nullptr));
+        heartTestBtn->setText(QCoreApplication::translate("Serial_Dialog", "heartTestBtn", nullptr));
+        bloodPressureBtn->setText(QCoreApplication::translate("Serial_Dialog", "bloodPressureBtn", nullptr));
+        serialControl->setText(QCoreApplication::translate("Serial_Dialog", "serialControl", nullptr));
         label->setText(QCoreApplication::translate("Serial_Dialog", "TextLabel", nullptr));
     } // retranslateUi
 
