@@ -82,6 +82,7 @@ bool Serial_Dialog::serialport_init()
         ui->comboBox->addItem(iter->portName());
         iter++;
     }
+    return true;
 }
 void Serial_Dialog::on_serialControl_clicked()
 {
