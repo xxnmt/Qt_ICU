@@ -22,15 +22,15 @@ void Main_Dialog::on_btn_Heart_clicked()
 
 void Main_Dialog::on_btn_Pressure_clicked()
 {
-    BloodPressure_Dialog *bpDialog = new BloodPressure_Dialog();
-    bpDialog->show();
+    // BloodPressure_Dialog *bpDialog = new BloodPressure_Dialog();
+    // bpDialog->show();
 }
 
 
 void Main_Dialog::on_btn_Blood_clicked()
 {
-    Hemodialysis_Dialog *hemoDialog = new Hemodialysis_Dialog();
-    hemoDialog->show();
+    // Hemodialysis_Dialog *hemoDialog = new Hemodialysis_Dialog();
+    // hemoDialog->show();
 }
 
 
@@ -42,7 +42,14 @@ void Main_Dialog::on_btn_Quit_clicked()
 
 void Main_Dialog::on_btn_Breath_clicked()
 {
-    Ventilator_Dialog *vDialog = new Ventilator_Dialog();
-    vDialog->show();
+    // Ventilator_Dialog *vDialog = new Ventilator_Dialog();
+    // vDialog->show();
+}
+
+
+void Main_Dialog::on_pushButton_clicked()
+{
+    Serial_Dialog* ser=new Serial_Dialog();
+    ser->show();
 }
 

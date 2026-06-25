@@ -1,5 +1,5 @@
 QT += widgets
-
+QT += widgets serialport
 CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -11,6 +11,8 @@ SOURCES += \
     heart_data.cpp \
     main.cpp \
     main_dialog.cpp \
+    serial_dialog.cpp \
+    serial_tool.cpp \
     user_data.cpp
 
 HEADERS += \
@@ -18,11 +20,14 @@ HEADERS += \
     ecgtest_dialog.h \
     heart_data.h \
     main_dialog.h \
+    serial_dialog.h \
+    serial_tool.h \
     user_data.h
 
 FORMS += \
     ecgtest_dialog.ui \
-    main_dialog.ui
+    main_dialog.ui \
+    serial_dialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

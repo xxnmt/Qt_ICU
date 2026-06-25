@@ -1,0 +1,11 @@
+release/ecgtest_dialog.o
+release/heart_data.o
+release/main.o
+release/main_dialog.o
+release/serial_dialog.o
+release/serial_tool.o
+release/user_data.o
+release/qrc_Resource.o
+release/moc_ecgtest_dialog.o
+release/moc_main_dialog.o
+release/moc_serial_dialog.o

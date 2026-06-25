@@ -1,7 +1,10 @@
 #ifndef MAIN_DIALOG_H
 #define MAIN_DIALOG_H
-
-#include"All_Header.h"
+#include "serial_dialog.h"
+#include "ecgtest_dialog.h"
+// #include "hemodialysis_dialog.h"
+// #include "bloodpressure_dialog.h"
+// #include "ventilator_dialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,6 +30,8 @@ private slots:
     void on_btn_Quit_clicked();
 
     void on_btn_Breath_clicked();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::Main_Dialog *ui;

@@ -10,33 +10,42 @@
 #define UI_ECGTEST_DIALOG_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAbstractButton>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_ECGTest_Dialog
 {
 public:
-    QDialogButtonBox *buttonBox;
+    QPushButton *btn_quit;
+    QLabel *label_UserName;
+    QLabel *label_UserAge;
 
     void setupUi(QDialog *ECGTest_Dialog)
     {
         if (ECGTest_Dialog->objectName().isEmpty())
             ECGTest_Dialog->setObjectName("ECGTest_Dialog");
         ECGTest_Dialog->resize(669, 449);
-        ECGTest_Dialog->setStyleSheet(QString::fromUtf8("border-image: url(:/resource/images/databack.jpg);"));
-        buttonBox = new QDialogButtonBox(ECGTest_Dialog);
-        buttonBox->setObjectName("buttonBox");
-        buttonBox->setGeometry(QRect(190, 340, 341, 32));
-        buttonBox->setOrientation(Qt::Orientation::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok);
+        ECGTest_Dialog->setStyleSheet(QString::fromUtf8(""));
+        btn_quit = new QPushButton(ECGTest_Dialog);
+        btn_quit->setObjectName("btn_quit");
+        btn_quit->setGeometry(QRect(630, 10, 25, 25));
+        btn_quit->setStyleSheet(QString::fromUtf8("border-image: url(:/resource/images/back.png);"));
+        label_UserName = new QLabel(ECGTest_Dialog);
+        label_UserName->setObjectName("label_UserName");
+        label_UserName->setGeometry(QRect(320, 10, 70, 25));
+        QFont font;
+        font.setPointSize(12);
+        label_UserName->setFont(font);
+        label_UserAge = new QLabel(ECGTest_Dialog);
+        label_UserAge->setObjectName("label_UserAge");
+        label_UserAge->setGeometry(QRect(410, 10, 70, 25));
+        label_UserAge->setFont(font);
 
         retranslateUi(ECGTest_Dialog);
-        QObject::connect(buttonBox, &QDialogButtonBox::accepted, ECGTest_Dialog, qOverload<>(&QDialog::accept));
-        QObject::connect(buttonBox, &QDialogButtonBox::rejected, ECGTest_Dialog, qOverload<>(&QDialog::reject));
 
         QMetaObject::connectSlotsByName(ECGTest_Dialog);
     } // setupUi
@@ -44,6 +53,9 @@ public:
     void retranslateUi(QDialog *ECGTest_Dialog)
     {
         ECGTest_Dialog->setWindowTitle(QCoreApplication::translate("ECGTest_Dialog", "Dialog", nullptr));
+        btn_quit->setText(QString());
+        label_UserName->setText(QCoreApplication::translate("ECGTest_Dialog", "TextLabel", nullptr));
+        label_UserAge->setText(QCoreApplication::translate("ECGTest_Dialog", "TextLabel", nullptr));
     } // retranslateUi
 
 };

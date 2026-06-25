@@ -1,8 +1,11 @@
 #ifndef USER_DATA_H
 #define USER_DATA_H
-#include<Qstring>
+#include<QString>
 class User_Data
 {
+private:
+    QString User_Name;
+    int User_Age;
 public:
     User_Data();
     User_Data(QString name,int age);
@@ -10,9 +13,7 @@ public:
     void setAge(int age);
     QString getName();
     int getAge();
-private:
-    QString User_Name;
-    int User_Age;
+
 
 };
 

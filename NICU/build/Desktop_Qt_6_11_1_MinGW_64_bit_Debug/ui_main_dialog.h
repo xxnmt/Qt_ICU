@@ -32,6 +32,7 @@ public:
     QLabel *lab_Blood;
     QLabel *lab_Pressure;
     QLabel *lab_Breath;
+    QPushButton *pushButton;
     QWidget *banner_Widget;
     QLabel *lab_Title;
     QPushButton *btn_Quit;
@@ -107,6 +108,9 @@ public:
 "\n"
 "font: 16pt \"Microsoft YaHei UI\";"));
         lab_Breath->setAlignment(Qt::AlignmentFlag::AlignCenter);
+        pushButton = new QPushButton(tab);
+        pushButton->setObjectName("pushButton");
+        pushButton->setGeometry(QRect(50, 50, 80, 18));
         tabWidget->addTab(tab, QString());
         banner_Widget = new QWidget(Main_Dialog);
         banner_Widget->setObjectName("banner_Widget");
@@ -159,6 +163,7 @@ public:
         lab_Blood->setText(QCoreApplication::translate("Main_Dialog", "\350\241\200\351\200\217\344\273\252", nullptr));
         lab_Pressure->setText(QCoreApplication::translate("Main_Dialog", "\350\241\200\345\216\213\344\273\252", nullptr));
         lab_Breath->setText(QCoreApplication::translate("Main_Dialog", "\345\221\274\345\220\270\346\234\272", nullptr));
+        pushButton->setText(QCoreApplication::translate("Main_Dialog", "PushButton", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("Main_Dialog", "Tab1", nullptr));
         lab_Title->setText(QCoreApplication::translate("Main_Dialog", "\351\207\215\347\227\207\347\233\221\346\212\244\347\263\273\347\273\237", nullptr));
         btn_Quit->setText(QString());

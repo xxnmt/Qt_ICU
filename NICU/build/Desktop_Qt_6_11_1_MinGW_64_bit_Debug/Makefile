@@ -255,6 +255,8 @@ Makefile: ../../NICU.pro D:/QT/6.11.1/mingw_64/mkspecs/win32-g++/qmake.conf D:/Q
 		D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_quickvectorimagehelpers_private.pri \
 		D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_quickwidgets.pri \
 		D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_quickwidgets_private.pri \
+		D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_serialport.pri \
+		D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_serialport_private.pri \
 		D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_shadertools.pri \
 		D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_shadertools_private.pri \
 		D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_spatialaudio.pri \
@@ -309,6 +311,7 @@ Makefile: ../../NICU.pro D:/QT/6.11.1/mingw_64/mkspecs/win32-g++/qmake.conf D:/Q
 		../../NICU.pro \
 		D:/QT/6.11.1/mingw_64/lib/Qt6Widgets.prl \
 		D:/QT/6.11.1/mingw_64/lib/Qt6Gui.prl \
+		D:/QT/6.11.1/mingw_64/lib/Qt6SerialPort.prl \
 		D:/QT/6.11.1/mingw_64/lib/Qt6Core.prl \
 		D:/QT/6.11.1/mingw_64/lib/Qt6EntryPoint.prl \
 		D:/QT/6.11.1/mingw_64/mkspecs/features/build_pass.prf \
@@ -499,6 +502,8 @@ D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_quickvectorimagehelpers.pri:
 D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_quickvectorimagehelpers_private.pri:
 D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_quickwidgets.pri:
 D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_quickwidgets_private.pri:
+D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_serialport.pri:
+D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_serialport_private.pri:
 D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_shadertools.pri:
 D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_shadertools_private.pri:
 D:/QT/6.11.1/mingw_64/mkspecs/modules/qt_lib_spatialaudio.pri:
@@ -553,6 +558,7 @@ D:/QT/6.11.1/mingw_64/mkspecs/features/lex.prf:
 ../../NICU.pro:
 D:/QT/6.11.1/mingw_64/lib/Qt6Widgets.prl:
 D:/QT/6.11.1/mingw_64/lib/Qt6Gui.prl:
+D:/QT/6.11.1/mingw_64/lib/Qt6SerialPort.prl:
 D:/QT/6.11.1/mingw_64/lib/Qt6Core.prl:
 D:/QT/6.11.1/mingw_64/lib/Qt6EntryPoint.prl:
 D:/QT/6.11.1/mingw_64/mkspecs/features/build_pass.prf:
