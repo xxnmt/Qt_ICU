@@ -1,7 +1,7 @@
 #ifndef MAIN_DIALOG_H
 #define MAIN_DIALOG_H
 #include "ecgtest_dialog.h"
-// #include "hemodialysis_dialog.h"
+#include "hemodialysis_dialog.h"
 // #include "bloodpressure_dialog.h"
 // #include "ventilator_dialog.h"
 

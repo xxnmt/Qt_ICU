@@ -7,17 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>760</width>
-    <height>534</height>
+    <height>540</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Main_Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">Main_Dialog{
- background-image: none;
-    background-color: transparent;
-}</string>
+   <string notr="true">border-image: url(:/resource_inside/images/mainbanner.png);</string>
   </property>
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
@@ -25,14 +22,11 @@
      <x>0</x>
      <y>90</y>
      <width>760</width>
-     <height>451</height>
+     <height>450</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">#{
- background-image: none;
-    background-color: transparent;
-}</string>
+    <string notr="true">border: none;  /* ✅ 移除边框 */</string>
    </property>
    <property name="currentIndex">
     <number>0</number>
@@ -202,76 +196,37 @@ font: 16pt &quot;Microsoft YaHei UI&quot;;</string>
     </widget>
    </widget>
   </widget>
-  <widget class="QWidget" name="banner_Widget" native="true">
+  <widget class="QLabel" name="lab_Title">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>760</width>
-     <height>110</height>
+     <x>80</x>
+     <y>10</y>
+     <width>591</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>24</pointsize>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>36</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+     <underline>false</underline>
     </font>
    </property>
    <property name="styleSheet">
     <string notr="true">border-image: none;
 background-color: transparent;
-background-image: url(:/resource/images/mainbanner.png);
-</string>
-   </property>
-   <widget class="QLabel" name="lab_Title">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>10</y>
-      <width>591</width>
-      <height>91</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>36</pointsize>
-      <italic>false</italic>
-      <bold>false</bold>
-      <underline>false</underline>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background: transparent;
 color: rgb(0, 0, 0);
 font: 36pt &quot;Microsoft YaHei UI&quot;;</string>
-    </property>
-    <property name="text">
-     <string>重症监护系统</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignmentFlag::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_Quit">
-    <property name="geometry">
-     <rect>
-      <x>730</x>
-      <y>0</y>
-      <width>25</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background: transparent;
-border-image: url(:/resource/images/quit.png);</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
+   </property>
+   <property name="text">
+    <string>重症监护系统</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
   </widget>
-  <zorder>banner_Widget</zorder>
-  <zorder>tabWidget</zorder>
  </widget>
  <resources/>
  <connections/>

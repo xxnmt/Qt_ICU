@@ -6,6 +6,18 @@ Main_Dialog::Main_Dialog(QWidget *parent)
     , ui(new Ui::Main_Dialog)
 {
     ui->setupUi(this);
+    // 防止主窗口缓冲区残留黑块
+    setAutoFillBackground(true);
+    setAttribute(Qt::WA_OpaquePaintEvent, true);
+
+    // 如果你的主窗口是无边框透明，必须加这一段
+    /*
+    setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
+    setAttribute(Qt::WA_TranslucentBackground);
+    QPalette pal = palette();
+    pal.setBrush(QPalette::Window, QColor("#ffffff")); // 和UI底色一致
+    setPalette(pal);
+    */
 }
 
 Main_Dialog::~Main_Dialog()
@@ -29,8 +41,8 @@ void Main_Dialog::on_btn_Pressure_clicked()
 
 void Main_Dialog::on_btn_Blood_clicked()
 {
-    // Hemodialysis_Dialog *hemoDialog = new Hemodialysis_Dialog();
-    // hemoDialog->show();
+    Hemodialysis_Dialog *hemoDialog = new Hemodialysis_Dialog();
+    hemoDialog->show();
 }
 
 

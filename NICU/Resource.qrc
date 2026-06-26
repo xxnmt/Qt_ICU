@@ -19,5 +19,25 @@
         <file>../resource/images/unlock.png</file>
         <file alias="hisdata">../resource/heartData/hisdata.txt</file>
         <file>../resource/hisdata.txt</file>
+        <file>resource_inside/images/blood.png</file>
+        <file>resource_inside/heartData/hisdata.txt</file>
+        <file>resource_inside/images/back.png</file>
+        <file>resource_inside/images/breath.png</file>
+        <file>resource_inside/images/breathgif.gif</file>
+        <file>resource_inside/images/breathimg.png</file>
+        <file>resource_inside/images/danger.png</file>
+        <file>resource_inside/images/databack.jpg</file>
+        <file>resource_inside/images/heart.png</file>
+        <file>resource_inside/images/hospitalback.jpg</file>
+        <file>resource_inside/images/lock.png</file>
+        <file>resource_inside/images/mainbanner.png</file>
+        <file>resource_inside/images/pressure.png</file>
+        <file>resource_inside/images/progress_back.png</file>
+        <file>resource_inside/images/progress_front.png</file>
+        <file>resource_inside/images/quit.png</file>
+        <file>resource_inside/images/resource.qrc</file>
+        <file>resource_inside/images/unlock.png</file>
+        <file>resource_inside/hisdata.txt</file>
+        <file>resource_inside/qtresource.qrc</file>
     </qresource>
 </RCC>

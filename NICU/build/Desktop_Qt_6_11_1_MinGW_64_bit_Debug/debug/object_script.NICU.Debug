@@ -1,10 +1,16 @@
 debug/ecgtest_dialog.o
 debug/heart_data.o
+debug/hemodialysis_dialog.o
 debug/main.o
 debug/main_dialog.o
-debug/serial_dialog.o
+debug/progressbar_check.o
+debug/progressbar_round.o
+debug/progressbar_splash.o
 debug/serial_tool.o
 debug/user_data.o
 debug/qrc_Resource.o
 debug/moc_ecgtest_dialog.o
+debug/moc_hemodialysis_dialog.o
 debug/moc_main_dialog.o
+debug/moc_progressbar_round.o
+debug/moc_progressbar_splash.o

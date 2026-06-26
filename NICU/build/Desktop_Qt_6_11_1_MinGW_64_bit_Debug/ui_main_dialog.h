@@ -32,26 +32,18 @@ public:
     QLabel *lab_Blood;
     QLabel *lab_Pressure;
     QLabel *lab_Breath;
-    QWidget *banner_Widget;
     QLabel *lab_Title;
-    QPushButton *btn_Quit;
 
     void setupUi(QDialog *Main_Dialog)
     {
         if (Main_Dialog->objectName().isEmpty())
             Main_Dialog->setObjectName("Main_Dialog");
-        Main_Dialog->resize(760, 534);
-        Main_Dialog->setStyleSheet(QString::fromUtf8("Main_Dialog{\n"
-" background-image: none;\n"
-"    background-color: transparent;\n"
-"}"));
+        Main_Dialog->resize(760, 540);
+        Main_Dialog->setStyleSheet(QString::fromUtf8("border-image: url(:/resource_inside/images/mainbanner.png);"));
         tabWidget = new QTabWidget(Main_Dialog);
         tabWidget->setObjectName("tabWidget");
-        tabWidget->setGeometry(QRect(0, 90, 760, 451));
-        tabWidget->setStyleSheet(QString::fromUtf8("#{\n"
-" background-image: none;\n"
-"    background-color: transparent;\n"
-"}"));
+        tabWidget->setGeometry(QRect(0, 90, 760, 450));
+        tabWidget->setStyleSheet(QString::fromUtf8("border: none;  /* \342\234\205 \347\247\273\351\231\244\350\276\271\346\241\206 */"));
         tab = new QWidget();
         tab->setObjectName("tab");
         tab->setStyleSheet(QString::fromUtf8("border-image: url(:/resource/images/hospitalback.jpg);"));
@@ -108,37 +100,21 @@ public:
 "font: 16pt \"Microsoft YaHei UI\";"));
         lab_Breath->setAlignment(Qt::AlignmentFlag::AlignCenter);
         tabWidget->addTab(tab, QString());
-        banner_Widget = new QWidget(Main_Dialog);
-        banner_Widget->setObjectName("banner_Widget");
-        banner_Widget->setGeometry(QRect(0, 0, 760, 110));
-        QFont font;
-        font.setPointSize(24);
-        banner_Widget->setFont(font);
-        banner_Widget->setStyleSheet(QString::fromUtf8("border-image: none;\n"
-"background-color: transparent;\n"
-"background-image: url(:/resource/images/mainbanner.png);\n"
-""));
-        lab_Title = new QLabel(banner_Widget);
+        lab_Title = new QLabel(Main_Dialog);
         lab_Title->setObjectName("lab_Title");
-        lab_Title->setGeometry(QRect(90, 10, 591, 91));
-        QFont font1;
-        font1.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
-        font1.setPointSize(36);
-        font1.setBold(false);
-        font1.setItalic(false);
-        font1.setUnderline(false);
-        lab_Title->setFont(font1);
-        lab_Title->setStyleSheet(QString::fromUtf8("background: transparent;\n"
+        lab_Title->setGeometry(QRect(80, 10, 591, 91));
+        QFont font;
+        font.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
+        font.setPointSize(36);
+        font.setBold(false);
+        font.setItalic(false);
+        font.setUnderline(false);
+        lab_Title->setFont(font);
+        lab_Title->setStyleSheet(QString::fromUtf8("border-image: none;\n"
+"background-color: transparent;\n"
 "color: rgb(0, 0, 0);\n"
 "font: 36pt \"Microsoft YaHei UI\";"));
         lab_Title->setAlignment(Qt::AlignmentFlag::AlignCenter);
-        btn_Quit = new QPushButton(banner_Widget);
-        btn_Quit->setObjectName("btn_Quit");
-        btn_Quit->setGeometry(QRect(730, 0, 25, 25));
-        btn_Quit->setStyleSheet(QString::fromUtf8("background: transparent;\n"
-"border-image: url(:/resource/images/quit.png);"));
-        banner_Widget->raise();
-        tabWidget->raise();
 
         retranslateUi(Main_Dialog);
 
@@ -161,7 +137,6 @@ public:
         lab_Breath->setText(QCoreApplication::translate("Main_Dialog", "\345\221\274\345\220\270\346\234\272", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("Main_Dialog", "Tab1", nullptr));
         lab_Title->setText(QCoreApplication::translate("Main_Dialog", "\351\207\215\347\227\207\347\233\221\346\212\244\347\263\273\347\273\237", nullptr));
-        btn_Quit->setText(QString());
     } // retranslateUi
 
 };
