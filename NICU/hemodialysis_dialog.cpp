@@ -20,9 +20,10 @@ Hemodialysis_Dialog::Hemodialysis_Dialog(QWidget *parent) :
     //setWindowFlags(Qt::FramelessWindowHint);
     ui->namelabel->setText(user.getName());
     ui->agelabel->setText(QString::number(user.getAge()));
-    ui->btn_connectD->setEnabled(false);
-    ui->btn_connectJ->setEnabled(false);
-    ui->btn_open->setEnabled(false);
+    ui->btn_connectD->setEnabled(0);
+    ui->btn_connectJ->setEnabled(0);
+    ui->btn_open->setEnabled(0);
+    ui->btn_claen->setEnabled(0);
     ui->progressBar_clean->setValue(0);
     ui->progressBar_D->setValue(0);
     ui->progressBar_J->setValue(0);
@@ -110,6 +111,7 @@ void Hemodialysis_Dialog::on_btn_check_clicked()
     m_timer = new QTimer(this);
     connect(m_timer,SIGNAL(timeout()),this, SLOT(updateProgress()));
     m_timer->start(100);
+
 }
 
 
@@ -123,6 +125,7 @@ void Hemodialysis_Dialog::updateProgress()
     if(percent>=100)
     {
         m_timer->stop();
+            ui->btn_claen->setEnabled(1);
         return;
     }
     else

@@ -34,8 +34,8 @@ void Main_Dialog::on_btn_Heart_clicked()
 
 void Main_Dialog::on_btn_Pressure_clicked()
 {
-    // BloodPressure_Dialog *bpDialog = new BloodPressure_Dialog();
-    // bpDialog->show();
+    BloodPressure_Dialog *bpDialog = new BloodPressure_Dialog();
+    bpDialog->show();
 }
 
 

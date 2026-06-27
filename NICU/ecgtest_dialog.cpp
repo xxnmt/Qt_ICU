@@ -482,6 +482,7 @@ void ECGTest_Dialog::updateWaveform()
 // ============================================================
 void ECGTest_Dialog::on_btn_quit_clicked()
 {
+    //关闭串口
     if (User_serial) {
         User_serial->serialClose();
     }
