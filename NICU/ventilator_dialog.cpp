@@ -52,7 +52,7 @@ bool Ventilator_Dialog::serialportInit()
     m_serial =new Serial_Tool;
     m_serial->m_serialport=new QSerialPort();
     connect(m_serial->m_serialport,SIGNAL(readyRead()),this,SLOT(receiveDataa()));
-    m_serial->serialOpen();
+    m_serial->serialOpen("com4");
     return 1;
 }
 

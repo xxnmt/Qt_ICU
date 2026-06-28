@@ -15,7 +15,7 @@ Hemodialysis_Dialog::Hemodialysis_Dialog(QWidget *parent) :
     // ui->lab_e->setStyleSheet("");
     // ui->lab_e->clear();
 ////////////////////////该方式无用//////////////////////////////
-    setWindowTitle(QString::fromLocal8Bit("血透仪"));
+    setWindowTitle(QString::fromUtf8("血透仪"));
     //无边框
     //setWindowFlags(Qt::FramelessWindowHint);
     ui->namelabel->setText(user.getName());
@@ -95,7 +95,10 @@ void Hemodialysis_Dialog::on_btn_start_clicked()
 
 void Hemodialysis_Dialog::on_btn_emergency_clicked()
 {
-    ui->lab_e->setStyleSheet("border-image: url(:/resource_inside/images/blood.png);");
+    // 图片显示异常，不会修复
+    //  ui->lab_e->setStyleSheet("border-image:
+    //  url(:/resource_inside/images/blood.png);");
+    ui->lab_e->setStyleSheet("background-color: rgb(255, 0, 0);");
 }
 
 

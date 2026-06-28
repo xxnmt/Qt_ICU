@@ -103,7 +103,7 @@ void BloodPressure::addCurve()
 void BloodPressure::serialPortInit(){
     m_serial->m_serialport = new QSerialPort();
     connect(m_serial->m_serialport,SIGNAL(readyRead()),this,SLOT(receiveData()));
-    m_serial->serialOpen();
+    m_serial->serialOpen("com3");
 }
 void BloodPressure::receiveData(){
     QByteArray message;

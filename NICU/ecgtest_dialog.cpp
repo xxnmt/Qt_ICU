@@ -398,7 +398,7 @@ bool ECGTest_Dialog::serialPortInit()
     connect(User_serial->m_serialport, &QSerialPort::readyRead,
             this, &ECGTest_Dialog::receiveData);
 
-    bool result = User_serial->serialOpen();
+    bool result = User_serial->serialOpen("com1");
     qDebug() << "Serial port init result:" << result;
 
     return result;

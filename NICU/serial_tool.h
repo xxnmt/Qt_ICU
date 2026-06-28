@@ -9,7 +9,7 @@ class Serial_Tool
 {
 public:
     Serial_Tool();
-    bool serialOpen();
+    bool serialOpen(QString com);
     void serialClose();
     QSerialPort *m_serialport;
 };

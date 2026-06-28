@@ -2,9 +2,9 @@
 #include "QDebug"
 
 Serial_Tool::Serial_Tool() {}
-bool Serial_Tool::serialOpen()
+bool Serial_Tool::serialOpen(QString com)
 {
-    m_serialport->setPortName("com4");
+    m_serialport->setPortName(com);
     m_serialport->setBaudRate(QSerialPort::Baud115200);
     m_serialport->setDataBits(QSerialPort::Data8);
     m_serialport->setParity(QSerialPort::NoParity);
