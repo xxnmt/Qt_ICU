@@ -19,6 +19,8 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -51,7 +53,10 @@ public:
     QLabel *label_3;
     QComboBox *comboBox;
     QLabel *label_4;
-    QComboBox *comboBox_2;
+    QSpinBox *spinBox;
+    QSpacerItem *verticalSpacer;
+    QSpacerItem *verticalSpacer_2;
+    QSpacerItem *verticalSpacer_3;
     QWidget *widget_2;
     QVBoxLayout *verticalLayout_7;
     QVBoxLayout *verticalLayout_6;
@@ -226,28 +231,43 @@ public:
         sizePolicy1.setHeightForWidth(label_3->sizePolicy().hasHeightForWidth());
         label_3->setSizePolicy(sizePolicy1);
 
-        formLayout->setWidget(0, QFormLayout::ItemRole::LabelRole, label_3);
+        formLayout->setWidget(1, QFormLayout::ItemRole::LabelRole, label_3);
 
         comboBox = new QComboBox(widget);
+        comboBox->addItem(QString());
+        comboBox->addItem(QString());
         comboBox->setObjectName("comboBox");
         sizePolicy1.setHeightForWidth(comboBox->sizePolicy().hasHeightForWidth());
         comboBox->setSizePolicy(sizePolicy1);
 
-        formLayout->setWidget(0, QFormLayout::ItemRole::FieldRole, comboBox);
+        formLayout->setWidget(1, QFormLayout::ItemRole::FieldRole, comboBox);
 
         label_4 = new QLabel(widget);
         label_4->setObjectName("label_4");
         sizePolicy1.setHeightForWidth(label_4->sizePolicy().hasHeightForWidth());
         label_4->setSizePolicy(sizePolicy1);
 
-        formLayout->setWidget(1, QFormLayout::ItemRole::LabelRole, label_4);
+        formLayout->setWidget(3, QFormLayout::ItemRole::LabelRole, label_4);
 
-        comboBox_2 = new QComboBox(widget);
-        comboBox_2->setObjectName("comboBox_2");
-        sizePolicy1.setHeightForWidth(comboBox_2->sizePolicy().hasHeightForWidth());
-        comboBox_2->setSizePolicy(sizePolicy1);
+        spinBox = new QSpinBox(widget);
+        spinBox->setObjectName("spinBox");
+        spinBox->setMinimum(100);
+        spinBox->setMaximum(300);
+        spinBox->setValue(180);
 
-        formLayout->setWidget(1, QFormLayout::ItemRole::FieldRole, comboBox_2);
+        formLayout->setWidget(3, QFormLayout::ItemRole::FieldRole, spinBox);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+
+        formLayout->setItem(2, QFormLayout::ItemRole::FieldRole, verticalSpacer);
+
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+
+        formLayout->setItem(0, QFormLayout::ItemRole::FieldRole, verticalSpacer_2);
+
+        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+
+        formLayout->setItem(4, QFormLayout::ItemRole::FieldRole, verticalSpacer_3);
 
 
         verticalLayout_2->addLayout(formLayout);
@@ -410,8 +430,11 @@ public:
         btn_connectD->setText(QCoreApplication::translate("Hemodialysis_Dialog", "\350\277\236\346\216\245\345\212\250\350\204\211\347\253\257", nullptr));
         btn_connectJ->setText(QCoreApplication::translate("Hemodialysis_Dialog", "\350\277\236\346\216\245\351\235\231\350\204\211\347\253\257", nullptr));
         btn_open->setText(QCoreApplication::translate("Hemodialysis_Dialog", "\346\211\223\345\274\200\350\241\200\346\263\265", nullptr));
-        label_3->setText(QCoreApplication::translate("Hemodialysis_Dialog", "123", nullptr));
-        label_4->setText(QCoreApplication::translate("Hemodialysis_Dialog", "123", nullptr));
+        label_3->setText(QCoreApplication::translate("Hemodialysis_Dialog", "\351\200\217\346\236\220\346\266\262", nullptr));
+        comboBox->setItemText(0, QCoreApplication::translate("Hemodialysis_Dialog", "A\346\266\262", nullptr));
+        comboBox->setItemText(1, QCoreApplication::translate("Hemodialysis_Dialog", "B\346\266\262", nullptr));
+
+        label_4->setText(QCoreApplication::translate("Hemodialysis_Dialog", "\350\241\200\346\263\265\346\265\201\351\200\237", nullptr));
         namelabel->setText(QCoreApplication::translate("Hemodialysis_Dialog", "123", nullptr));
         agelabel->setText(QCoreApplication::translate("Hemodialysis_Dialog", "123", nullptr));
         btn_quit->setText(QString());

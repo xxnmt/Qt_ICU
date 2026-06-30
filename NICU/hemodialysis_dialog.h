@@ -35,10 +35,10 @@ private slots:
 private:
     Ui::Hemodialysis_Dialog *ui;
 
-    QTimer *m_timer;
-    ProgressBar_Splash *m_splash;
-    ProgressBar_Round *m_fillBar;
-    ProgressBar_Round *m_startBar;
+    QTimer *m_timer = nullptr;        // ← 直接初始化
+    ProgressBar_Splash *m_splash = nullptr;
+    ProgressBar_Round *m_fillBar = nullptr;
+    ProgressBar_Round *m_startBar = nullptr;
 
 };
 
