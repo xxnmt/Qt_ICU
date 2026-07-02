@@ -8,6 +8,19 @@ namespace Ui {
 class Ventilator_Dialog;
 }
 
+enum VentilationMode {
+    VCV,
+    PCV,
+    PSV
+};
+
+enum ParamType {
+    SET_PARAM,
+    MONITOR_PARAM,
+    DERIVED_PARAM,
+    NA_PARAM
+};
+
 class Ventilator_Dialog : public QDialog
 {
     Q_OBJECT
@@ -17,18 +30,18 @@ public:
     ~Ventilator_Dialog();
 
     void showGif();
-    void showInfo(QByteArray info);
-    bool serialportInit();
     void alarmLight();
-
+    void switchMode(VentilationMode mode);
+    void updateParamStatus(const QString& paramName, ParamType type);
+    void sendSetParams();
+    ParamType getParamType(VentilationMode mode, const QString& paramName);
 
 private slots:
     void on_btn_lock_clicked();
-
     void on_btn_quit_clicked();
     void updateLight();
-    void receiveDataa();
-
+    void receiveData();
+    void on_comboBox_ventilationMode_currentIndexChanged(int index);
 
 private:
     Ui::Ventilator_Dialog *ui;
@@ -37,6 +50,8 @@ private:
     QTimer *m_timer;
     bool m_lock;
     int m_lightState;
+    VentilationMode m_currentMode;
+    bool serialportInit();
 
 };
 

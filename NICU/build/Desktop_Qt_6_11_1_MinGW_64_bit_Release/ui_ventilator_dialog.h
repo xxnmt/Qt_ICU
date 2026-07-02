@@ -11,14 +11,16 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
+#include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "alarm_light.h"
@@ -44,19 +46,19 @@ public:
     QHBoxLayout *horizontalLayout_6;
     QVBoxLayout *verticalLayout_5;
     QLabel *label;
-    QLCDNumber *num_wet;
+    QDoubleSpinBox *doubleSpinBox_tidalVolume;
     QVBoxLayout *verticalLayout_4;
     QLabel *label_3;
-    QLCDNumber *num_leak;
+    QDoubleSpinBox *doubleSpinBox_leakageVolume;
     QVBoxLayout *verticalLayout_3;
     QLabel *label_5;
-    QLCDNumber *num_air_min;
+    QDoubleSpinBox *doubleSpinBox_minuteVentilation;
     QVBoxLayout *verticalLayout_2;
     QLabel *label_7;
-    QLCDNumber *num_breathingRate;
+    QSpinBox *spinBox_respiratoryRate;
     QVBoxLayout *verticalLayout;
     QLabel *label_9;
-    QLCDNumber *num_breathingTime;
+    QDoubleSpinBox *doubleSpinBox_inspiratoryTime;
     QSpacerItem *horizontalSpacer_4;
     QHBoxLayout *horizontalLayout_2;
     Alarm_Light *widget_light;
@@ -65,19 +67,19 @@ public:
     QHBoxLayout *horizontalLayout;
     QFormLayout *formLayout_3;
     QLabel *label_13;
-    QLabel *label_2;
     QLabel *label_14;
-    QLCDNumber *numboostTime;
+    QComboBox *comboBox_ventilationMode;
+    QDoubleSpinBox *doubleSpinBox_riseTime;
     QFormLayout *formLayout_2;
     QLabel *label_8;
-    QLCDNumber *num_IPAP;
     QLabel *label_10;
-    QLCDNumber *num_EPAP;
+    QDoubleSpinBox *doubleSpinBox_inspiratoryPressure;
+    QDoubleSpinBox *doubleSpinBox_expiratoryPressure;
     QFormLayout *formLayout;
     QLabel *label_4;
-    QLCDNumber *num_backupRate;
     QLabel *label_6;
-    QLCDNumber *num_IERO;
+    QSpinBox *spinBox_backupRate;
+    QDoubleSpinBox *doubleSpinBox_ieRatio;
 
     void setupUi(QDialog *Ventilator_Dialog)
     {
@@ -162,10 +164,11 @@ public:
 
         verticalLayout_5->addWidget(label);
 
-        num_wet = new QLCDNumber(Ventilator_Dialog);
-        num_wet->setObjectName("num_wet");
+        doubleSpinBox_tidalVolume = new QDoubleSpinBox(Ventilator_Dialog);
+        doubleSpinBox_tidalVolume->setObjectName("doubleSpinBox_tidalVolume");
+        doubleSpinBox_tidalVolume->setMaximum(1000.000000000000000);
 
-        verticalLayout_5->addWidget(num_wet);
+        verticalLayout_5->addWidget(doubleSpinBox_tidalVolume);
 
 
         horizontalLayout_6->addLayout(verticalLayout_5);
@@ -177,10 +180,10 @@ public:
 
         verticalLayout_4->addWidget(label_3);
 
-        num_leak = new QLCDNumber(Ventilator_Dialog);
-        num_leak->setObjectName("num_leak");
+        doubleSpinBox_leakageVolume = new QDoubleSpinBox(Ventilator_Dialog);
+        doubleSpinBox_leakageVolume->setObjectName("doubleSpinBox_leakageVolume");
 
-        verticalLayout_4->addWidget(num_leak);
+        verticalLayout_4->addWidget(doubleSpinBox_leakageVolume);
 
 
         horizontalLayout_6->addLayout(verticalLayout_4);
@@ -192,10 +195,10 @@ public:
 
         verticalLayout_3->addWidget(label_5);
 
-        num_air_min = new QLCDNumber(Ventilator_Dialog);
-        num_air_min->setObjectName("num_air_min");
+        doubleSpinBox_minuteVentilation = new QDoubleSpinBox(Ventilator_Dialog);
+        doubleSpinBox_minuteVentilation->setObjectName("doubleSpinBox_minuteVentilation");
 
-        verticalLayout_3->addWidget(num_air_min);
+        verticalLayout_3->addWidget(doubleSpinBox_minuteVentilation);
 
 
         horizontalLayout_6->addLayout(verticalLayout_3);
@@ -207,10 +210,10 @@ public:
 
         verticalLayout_2->addWidget(label_7);
 
-        num_breathingRate = new QLCDNumber(Ventilator_Dialog);
-        num_breathingRate->setObjectName("num_breathingRate");
+        spinBox_respiratoryRate = new QSpinBox(Ventilator_Dialog);
+        spinBox_respiratoryRate->setObjectName("spinBox_respiratoryRate");
 
-        verticalLayout_2->addWidget(num_breathingRate);
+        verticalLayout_2->addWidget(spinBox_respiratoryRate);
 
 
         horizontalLayout_6->addLayout(verticalLayout_2);
@@ -222,10 +225,10 @@ public:
 
         verticalLayout->addWidget(label_9);
 
-        num_breathingTime = new QLCDNumber(Ventilator_Dialog);
-        num_breathingTime->setObjectName("num_breathingTime");
+        doubleSpinBox_inspiratoryTime = new QDoubleSpinBox(Ventilator_Dialog);
+        doubleSpinBox_inspiratoryTime->setObjectName("doubleSpinBox_inspiratoryTime");
 
-        verticalLayout->addWidget(num_breathingTime);
+        verticalLayout->addWidget(doubleSpinBox_inspiratoryTime);
 
 
         horizontalLayout_6->addLayout(verticalLayout);
@@ -279,20 +282,23 @@ public:
 
         formLayout_3->setWidget(0, QFormLayout::ItemRole::LabelRole, label_13);
 
-        label_2 = new QLabel(Ventilator_Dialog);
-        label_2->setObjectName("label_2");
-
-        formLayout_3->setWidget(0, QFormLayout::ItemRole::FieldRole, label_2);
-
         label_14 = new QLabel(Ventilator_Dialog);
         label_14->setObjectName("label_14");
 
         formLayout_3->setWidget(1, QFormLayout::ItemRole::LabelRole, label_14);
 
-        numboostTime = new QLCDNumber(Ventilator_Dialog);
-        numboostTime->setObjectName("numboostTime");
+        comboBox_ventilationMode = new QComboBox(Ventilator_Dialog);
+        comboBox_ventilationMode->addItem(QString());
+        comboBox_ventilationMode->addItem(QString());
+        comboBox_ventilationMode->addItem(QString());
+        comboBox_ventilationMode->setObjectName("comboBox_ventilationMode");
 
-        formLayout_3->setWidget(1, QFormLayout::ItemRole::FieldRole, numboostTime);
+        formLayout_3->setWidget(0, QFormLayout::ItemRole::FieldRole, comboBox_ventilationMode);
+
+        doubleSpinBox_riseTime = new QDoubleSpinBox(Ventilator_Dialog);
+        doubleSpinBox_riseTime->setObjectName("doubleSpinBox_riseTime");
+
+        formLayout_3->setWidget(1, QFormLayout::ItemRole::FieldRole, doubleSpinBox_riseTime);
 
 
         horizontalLayout->addLayout(formLayout_3);
@@ -304,20 +310,20 @@ public:
 
         formLayout_2->setWidget(0, QFormLayout::ItemRole::LabelRole, label_8);
 
-        num_IPAP = new QLCDNumber(Ventilator_Dialog);
-        num_IPAP->setObjectName("num_IPAP");
-
-        formLayout_2->setWidget(0, QFormLayout::ItemRole::FieldRole, num_IPAP);
-
         label_10 = new QLabel(Ventilator_Dialog);
         label_10->setObjectName("label_10");
 
         formLayout_2->setWidget(1, QFormLayout::ItemRole::LabelRole, label_10);
 
-        num_EPAP = new QLCDNumber(Ventilator_Dialog);
-        num_EPAP->setObjectName("num_EPAP");
+        doubleSpinBox_inspiratoryPressure = new QDoubleSpinBox(Ventilator_Dialog);
+        doubleSpinBox_inspiratoryPressure->setObjectName("doubleSpinBox_inspiratoryPressure");
 
-        formLayout_2->setWidget(1, QFormLayout::ItemRole::FieldRole, num_EPAP);
+        formLayout_2->setWidget(0, QFormLayout::ItemRole::FieldRole, doubleSpinBox_inspiratoryPressure);
+
+        doubleSpinBox_expiratoryPressure = new QDoubleSpinBox(Ventilator_Dialog);
+        doubleSpinBox_expiratoryPressure->setObjectName("doubleSpinBox_expiratoryPressure");
+
+        formLayout_2->setWidget(1, QFormLayout::ItemRole::FieldRole, doubleSpinBox_expiratoryPressure);
 
 
         horizontalLayout->addLayout(formLayout_2);
@@ -329,20 +335,20 @@ public:
 
         formLayout->setWidget(0, QFormLayout::ItemRole::LabelRole, label_4);
 
-        num_backupRate = new QLCDNumber(Ventilator_Dialog);
-        num_backupRate->setObjectName("num_backupRate");
-
-        formLayout->setWidget(0, QFormLayout::ItemRole::FieldRole, num_backupRate);
-
         label_6 = new QLabel(Ventilator_Dialog);
         label_6->setObjectName("label_6");
 
         formLayout->setWidget(1, QFormLayout::ItemRole::LabelRole, label_6);
 
-        num_IERO = new QLCDNumber(Ventilator_Dialog);
-        num_IERO->setObjectName("num_IERO");
+        spinBox_backupRate = new QSpinBox(Ventilator_Dialog);
+        spinBox_backupRate->setObjectName("spinBox_backupRate");
 
-        formLayout->setWidget(1, QFormLayout::ItemRole::FieldRole, num_IERO);
+        formLayout->setWidget(0, QFormLayout::ItemRole::FieldRole, spinBox_backupRate);
+
+        doubleSpinBox_ieRatio = new QDoubleSpinBox(Ventilator_Dialog);
+        doubleSpinBox_ieRatio->setObjectName("doubleSpinBox_ieRatio");
+
+        formLayout->setWidget(1, QFormLayout::ItemRole::FieldRole, doubleSpinBox_ieRatio);
 
 
         horizontalLayout->addLayout(formLayout);
@@ -375,8 +381,11 @@ public:
         label_9->setText(QCoreApplication::translate("Ventilator_Dialog", "\345\220\270\346\260\224\346\227\266\351\227\264", nullptr));
         lab_Gif->setText(QString());
         label_13->setText(QCoreApplication::translate("Ventilator_Dialog", "\351\200\232\346\260\224\346\250\241\345\274\217", nullptr));
-        label_2->setText(QCoreApplication::translate("Ventilator_Dialog", "TextLabel", nullptr));
         label_14->setText(QCoreApplication::translate("Ventilator_Dialog", "\345\215\207\345\216\213\346\227\266\351\227\264", nullptr));
+        comboBox_ventilationMode->setItemText(0, QCoreApplication::translate("Ventilator_Dialog", "\345\256\271\351\207\217\346\216\247\345\210\266", nullptr));
+        comboBox_ventilationMode->setItemText(1, QCoreApplication::translate("Ventilator_Dialog", "\345\216\213\345\212\233\346\216\247\345\210\266", nullptr));
+        comboBox_ventilationMode->setItemText(2, QCoreApplication::translate("Ventilator_Dialog", "\345\216\213\345\212\233\350\276\205\345\212\251", nullptr));
+
         label_8->setText(QCoreApplication::translate("Ventilator_Dialog", "\345\220\270\346\260\224\345\216\213\345\212\233", nullptr));
         label_10->setText(QCoreApplication::translate("Ventilator_Dialog", "\345\221\274\346\260\224\345\216\213\345\212\233", nullptr));
         label_4->setText(QCoreApplication::translate("Ventilator_Dialog", "\345\244\207\347\224\250\351\242\221\347\216\207", nullptr));

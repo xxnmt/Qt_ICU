@@ -25,7 +25,7 @@ Ot_MainWin_system/
 │   ├── main_dialog.cpp/h          # 主对话框（功能入口）
 │   ├── ecgtest_dialog.cpp/h/ui   # 心电图模块
 │   ├── bloodpressure_dialog.cpp/h/ui # 血压仪模块
-│   ├── hemodialysis_dialog.cpp/h/ui # 血透仪模块（已添加串口通信）
+│   ├── hemodialysis_dialog.cpp/h/ui # 血透仪模块
 │   ├── ventilator_dialog.cpp/h/ui # 呼吸机模块
 │   ├── bloodpressure.cpp/h        # 血压数据处理类
 │   ├── heart_data.cpp/h           # 心电数据类
@@ -39,7 +39,7 @@ Ot_MainWin_system/
 │   ├── All_Header.h              # 头文件汇总
 │   ├── build/                     # 构建输出目录
 │   └── resource_inside/          # 内部资源文件
-├── Transmission/                  # 数据传输客户端（已添加HDD通道）
+├── Transmission/                  # 数据传输客户端
 │   ├── main.cpp                  # 程序入口
 │   ├── Transmission.pro          # Qt 项目配置文件
 │   └── serial_dialog.cpp/h/ui    # 串口数据发送界面
@@ -55,23 +55,23 @@ Ot_MainWin_system/
 ### 3.1 系统架构
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     Main_Dialog (主界面)                    │
+┌───────────────────────────────────────────────────────────┐
+│                     Main_Dialog (主界面)                   │
 │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
-│  │ 心电图    │ │ 血压仪    │ │ 血透仪    │ │ 呼吸机    │      │
+│  │ 心电图   │ │ 血压仪    │ │ 血透仪    │ │ 呼吸机    │     │
 │  └────┬─────┘ └────┬─────┘ └────┬─────┘ └────┬─────┘      │
 └───────┼────────────┼────────────┼────────────┼────────────┘
         │            │            │            │
         ▼            ▼            ▼            ▼
 ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-│ECGTest_Dialog││BloodPressure││Hemodialysis ││Ventilator   │
-│             ││_Dialog      ││_Dialog      ││_Dialog      │
+│ECGTest│       │BloodPressure│ │Hemodialysis │ │Ventilator   │
+_Dialog│      │ │_Dialog      │ │_Dialog      │ │_Dialog      │
 └───────┬─────┘ └───────┬─────┘ └───────┬─────┘ └───────┬─────┘
         │               │               │               │
         ▼               ▼               ▼               ▼
 ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-│Heart_Data   ││BloodPressure││Serial_Tool  ││Alarm_Light  │
-│(12导联数据) ││(QWT绘图)    ││(串口通信)   ││(状态指示灯) │
+│Heart_Data   │ │BloodPressure│ │ProgressBar_ │ │Alarm_Light  │
+│(12导联数据)  │ │(QWT绘图)    │ │Round/Splash │ │(状态指示灯)  │
 └───────┬─────┘ └───────┬─────┘ └─────────────┘ └───────┬─────┘
         │               │                               │
         └───────────────┼───────────────────────────────┘
@@ -94,8 +94,8 @@ Ot_MainWin_system/
 |------|------|--------|----------|
 | 心电图 | COM4 | 115200 | 12个整数，逗号分隔 |
 | 血压仪 | COM3 | 115200 | 3字节（高压/低压/脉搏） |
-| 呼吸机 | COM4 | 115200 | 字符串（湿化/泄漏）或 'e'（紧急） |
-| 血透仪 | COM2 | 115200 | 命令格式: `HDD:<command>`，进度格式: `HDD:<command>:<progress>` |
+| 呼吸机 | COM4 | 115200 | `VENT_SET:`（设定参数）、`VENT_STOP`（停止）、`VENT_DATA:`（实时数据）或 'e'（紧急） |
+| 血透仪 | COM2 | 115200 | `HDD:<command>`（命令）、`HDD:<command>:<progress>`（进度） |
 
 ---
 
@@ -160,9 +160,6 @@ void receiveData();                     // 串口数据接收槽
 - 端口: COM4
 - 数据格式: `16,12,9,8,6,34,20,22,20,16,12,9`（12个通道数据，逗号分隔）
 
-**资源文件**:
-- 历史数据路径: `:/hisdata`（通过 Resource.qrc 配置）
-
 ---
 
 ### 4.3 血压仪模块 (BloodPressure_Dialog)
@@ -214,13 +211,12 @@ void updateCurve(QByteArray);         // 更新曲线数据
 
 **文件**: `hemodialysis_dialog.cpp/h/ui`
 
-**功能**: 血液透析流程模拟，包含设备自检、管道连接、清洗、预充、治疗等步骤，支持串口通信控制。
+**功能**: 血液透析流程模拟，包含设备自检、管道连接、清洗、预充、治疗等步骤。
 
 **核心组件**:
-- `Serial_Tool` - 串口通信工具（新增）
-- `ProgressBar_Splash` - 进度条动画
+- `ProgressBar_Splash` - 进度条动画（用于各步骤进度）
 - `ProgressBar_Round` - 圆形进度条（用于填充和开始按钮）
-- `QTimer` - 定时器
+- `QTimer` - 定时器控制进度
 
 **UI 控件**:
 - `btn_check` - 自检按钮
@@ -239,46 +235,16 @@ void updateCurve(QByteArray);         // 更新曲线数据
 
 **核心方法**:
 ```cpp
-void serialPortInit();               // 初始化串口
-void receiveData();                  // 接收串口数据
-void updateHemoProgress(...);        // 根据进度更新UI
-void on_btn_check_clicked();         // 发送自检命令
-void on_btn_claen_clicked();         // 发送清洗命令
-void on_btn_connectD_clicked();      // 发送连接动脉命令
-void on_btn_connectJ_clicked();      // 发送连接静脉命令
-void on_btn_open_clicked();          // 发送开泵命令
-void on_btn_fill_clicked();          // 发送预充命令
-void on_btn_start_clicked();         // 发送开始治疗命令
-void on_btn_emergency_clicked();     // 发送紧急停止命令
-void drawRoundProgress();            // 绘制圆形进度条
+void on_btn_check_clicked();      // 启动自检流程
+void on_btn_claen_clicked();      // 启动清洗流程
+void on_btn_connectD_clicked();   // 连接动脉
+void on_btn_connectJ_clicked();   // 连接静脉
+void on_btn_open_clicked();       // 开泵
+void on_btn_fill_clicked();       // 预充（圆形进度条）
+void on_btn_start_clicked();      // 开始治疗（圆形进度条）
+void on_btn_emergency_clicked();  // 紧急停止（红色背景）
+void updateProgress();            // 更新自检进度
 ```
-
-**串口通信**:
-- 端口: COM2（在构造函数中自动初始化并打开）
-- 命令格式: `HDD:<command>`（发送到Transmission）
-- 进度格式: `HDD:<command>:<progress>`（从Transmission接收）
-
-**串口初始化流程**:
-```cpp
-void serialPortInit() {
-    m_serial = new Serial_Tool();
-    m_serial->m_serialport = new QSerialPort(this);
-    m_serial->serialOpen("COM2");
-    connect(m_serial->m_serialport, SIGNAL(readyRead()), this, SLOT(receiveData()));
-}
-```
-
-**命令列表**:
-| 命令 | 对应按钮 | 进度完成后启用按钮 |
-|------|----------|-------------------|
-| `HDD:check` | btn_check | btn_claen |
-| `HDD:clean` | btn_claen | btn_connectD |
-| `HDD:connectD` | btn_connectD | btn_connectJ |
-| `HDD:connectJ` | btn_connectJ | btn_open |
-| `HDD:open` | btn_open | btn_fill |
-| `HDD:fill` | btn_fill | btn_start |
-| `HDD:start` | btn_start | - |
-| `HDD:emergency` | btn_emergency | - |
 
 ---
 
@@ -286,7 +252,7 @@ void serialPortInit() {
 
 **文件**: `ventilator_dialog.cpp/h/ui`
 
-**功能**: 呼吸机监控界面，显示呼吸参数和状态指示灯。
+**功能**: 呼吸机监控界面，支持三种通气模式（容量控制VCV、压力控制PCV、压力支持PSV），实现参数设定与实时监测功能。
 
 **核心组件**:
 - `Alarm_Light` - 报警灯组件（绿/黄/红/橙四种状态）
@@ -294,21 +260,78 @@ void serialPortInit() {
 - `Serial_Tool` - 串口通信
 
 **UI 控件**:
-- `lab_Gif` - 呼吸动画显示
-- `num_wet` - 湿化数值显示
-- `num_leak` - 泄漏数值显示
-- `widget_light` - 状态指示灯
-- `btn_lock` - 锁定/解锁按钮
+| 控件名称 | 类型 | 功能 |
+|----------|------|------|
+| `comboBox_ventilationMode` | QComboBox | 通气模式选择（容量控制/压力控制/压力支持） |
+| `doubleSpinBox_tidalVolume` | QDoubleSpinBox | 潮气量 |
+| `doubleSpinBox_leakageVolume` | QDoubleSpinBox | 漏气量 |
+| `doubleSpinBox_minuteVentilation` | QDoubleSpinBox | 每分钟通气量 |
+| `spinBox_respiratoryRate` | QSpinBox | 呼吸频率 |
+| `doubleSpinBox_inspiratoryTime` | QDoubleSpinBox | 吸气时间 |
+| `doubleSpinBox_riseTime` | QDoubleSpinBox | 升压时间 |
+| `doubleSpinBox_inspiratoryPressure` | QDoubleSpinBox | 吸气压力 |
+| `doubleSpinBox_expiratoryPressure` | QDoubleSpinBox | 呼气压力 |
+| `spinBox_backupRate` | QSpinBox | 备用频率 |
+| `doubleSpinBox_ieRatio` | QDoubleSpinBox | 呼吸比例 |
+| `lab_Gif` | QLabel | 呼吸动画显示 |
+| `widget_light` | Alarm_Light | 状态指示灯 |
+| `btn_lock` | QPushButton | 锁定/解锁按钮 |
+
+**核心枚举**:
+```cpp
+enum VentilationMode {
+    VCV,  // 容量控制
+    PCV,  // 压力控制
+    PSV   // 压力支持
+};
+
+enum ParamType {
+    SET_PARAM,      // 设定参数
+    MONITOR_PARAM,  // 监测参数
+    DERIVED_PARAM,  // 派生参数
+    NA_PARAM        // 不适用
+};
+```
 
 **核心方法**:
 ```cpp
-void showGif();                  // 显示呼吸动画
-void showInfo(QByteArray);       // 解析并显示参数
-void serialportInit();           // 初始化串口
-void alarmLight();               // 初始化报警灯
-void updateLight();              // 灯状态切换槽
-void receiveDataa();             // 串口数据接收槽
+void showGif();                          // 显示呼吸动画
+void serialportInit();                   // 初始化串口
+void alarmLight();                       // 初始化报警灯
+void updateLight();                      // 灯状态切换槽
+void receiveData();                      // 串口数据接收槽
+void switchMode(VentilationMode mode);   // 切换通气模式
+void updateParamStatus(...);             // 更新参数可编辑状态
+void sendSetParams();                    // 发送设定参数
+ParamType getParamType(...);             // 获取参数类型
 ```
+
+**参数分类表**:
+| 参数 | 容量控制(VCV) | 压力控制(PCV) | 压力支持(PSV) |
+|------|:-------------:|:-------------:|:-------------:|
+| 潮气量 | **设定** | 监测(500±10) | 监测(500±10) |
+| 漏气量 | 监测(20±4) | 监测(20±4) | 监测(20±4) |
+| 每分钟通气量 | **派生**(计算) | **派生**(计算) | **派生**(计算) |
+| 呼吸频率 | **设定** | **设定** | 监测(13~20) |
+| 吸气时间 | **设定** | **设定** | **派生**(0.6~1.8) |
+| 升压时间 | N/A(隐藏) | **设定** | **设定** |
+| 吸气压力 | 监测(16±3) | **设定** | **设定** |
+| 呼气压力 | **设定** | **设定** | **设定** |
+| 备用频率 | **设定** | **设定** | **设定** |
+| 呼吸比例 | **派生**(计算) | **派生**(计算) | **派生**(计算) |
+
+**参数类型定义**:
+- **设定参数**: 医生手动输入，解锁状态下可编辑
+- **监测参数**: 设备传感器测量，实时更新，始终只读
+- **派生参数**: 由其他参数计算得出，始终只读
+- **N/A**: 该模式下不适用，控件隐藏
+
+**锁定机制**:
+- `btn_lock` 控制整个界面的可编辑状态
+- 锁定状态：所有设定参数和通气模式下拉框不可编辑
+- 解锁状态：设定参数可编辑，通气模式可切换
+- 监测参数和派生参数始终只读，不受锁定状态影响
+- 锁定时自动发送当前设定参数到 Transmission
 
 **灯状态说明**:
 | 状态 | 颜色 | 含义 |
@@ -318,7 +341,24 @@ void receiveDataa();             // 串口数据接收槽
 
 **串口通信**:
 - 端口: COM4
-- 数据格式: `140.5,22.3`（湿化值,泄漏值）或 `e`（紧急信号）
+
+**NICU → Transmission（设定参数）**:
+```
+格式: VENT_SET:<mode>:<tidalVolume>:<respRate>:<inspTime>:<riseTime>:<inspPressure>:<expPressure>:<backupRate>
+示例: VENT_SET:VCV:500:15:1.0:0:18:5:10
+```
+
+**NICU → Transmission（停止命令）**:
+```
+格式: VENT_STOP
+说明: 解锁时发送，停止数据传输
+```
+
+**Transmission → NICU（实时数据）**:
+```
+格式: VENT_DATA:<mode>:<tidalVolume>:<leak>:<minuteVol>:<respRate>:<inspTime>:<riseTime>:<inspPressure>:<expPressure>:<backupRate>:<ieRatio>
+示例: VENT_DATA:VCV:500:18:7.5:15:1.0:0:17:5:10:0.5
+```
 
 ---
 
@@ -504,7 +544,7 @@ void PaintEvent(QPaintEvent*);   // 绘制进度条
 
 **文件**: `serial_dialog.cpp/h/ui`
 
-**功能**: 模拟医疗设备数据发送，支持五个功能通道的串口数据传输。
+**功能**: 模拟医疗设备数据发送，支持五个功能通道的串口数据传输，包括呼吸机三模式数据模拟。
 
 **核心数据结构**:
 ```cpp
@@ -518,7 +558,18 @@ struct FunctionChannel {
     bool isConnected;            // 连接状态
     bool isTransmitting;         // 传输状态
     int timerId;                 // 定时器ID
-    QString currentCommand;      // 当前命令（HDD专用）
+    int dataIndex;               // 数据索引（心跳用）
+    QString currentCommand;      // 当前命令（HDD用）
+    
+    // 呼吸机专用字段
+    QString currentVentMode;     // 当前通气模式（VCV/PCV/PSV）
+    double tidalVolume;          // 潮气量（ml）
+    int respiratoryRate;         // 呼吸频率（次/分）
+    double inspiratoryTime;      // 吸气时间（秒）
+    double riseTime;             // 升压时间（%）
+    double inspiratoryPressure;  // 吸气压力（cmH2O）
+    double expiratoryPressure;   // 呼气压力（cmH2O）
+    int backupRate;              // 备用频率（次/分）
 };
 ```
 
@@ -527,7 +578,7 @@ struct FunctionChannel {
 |------|------|-----------|----------|
 | m_heartChannel | 心跳/心电图 | 200ms | 12个整数，逗号分隔 |
 | m_pressureChannel | 血压 | 1000ms | 3字节二进制 |
-| m_breathChannel | 呼吸 | 1000ms | 两个浮点数，逗号分隔 |
+| m_breathChannel | 呼吸机 | 1000ms | `VENT_DATA:<参数列表>` |
 | m_hurryChannel | 紧急 | 单次发送 | 'e' 字符 |
 | m_hddChannel | 血透仪 | 100ms | `HDD:<command>:<progress>` |
 
@@ -537,10 +588,31 @@ struct FunctionChannel {
 - 心跳和血压不允许共享串口
 - 呼吸、紧急和血透之间可以共享串口
 
-**串口接收处理**:
-- 在 `openSerialPortForChannel()` 中连接 `readyRead` 信号
-- 检测 `HDD:` 前缀命令，提取命令内容
-- 设置 `currentCommand` 并启动定时器发送进度数据
+**呼吸机三模式数据模拟算法**:
+
+**VCV模式（容量控制）**:
+- 潮气量 = 设定值（不波动）
+- 吸气压力 = 16 ± 3（模拟传感器测量）
+- 漏气量 = 20 ± 4（模拟传感器测量）
+- 每分钟通气量 = 潮气量 × 呼吸频率 / 1000（计算得出）
+- 呼吸比例 = 吸气时间 / (呼吸周期 - 吸气时间)（计算得出）
+- 升压时间 = 0（不适用，隐藏）
+
+**PCV模式（压力控制）**:
+- 吸气压力 = 设定值
+- 潮气量 = 500 ± 10（模拟传感器测量）
+- 漏气量 = 20 ± 4（模拟传感器测量）
+- 每分钟通气量 = 潮气量 × 呼吸频率 / 1000（计算得出）
+- 呼吸比例 = 吸气时间 / (呼吸周期 - 吸气时间)（计算得出）
+
+**PSV模式（压力支持）**:
+- 吸气压力 = 设定值
+- 潮气量 = 500 ± 10（模拟传感器测量）
+- 呼吸频率 = 13 ~ 20（模拟传感器测量）
+- 吸气时间 = 0.6 ~ 1.8秒（模拟传感器测量）
+- 漏气量 = 20 ± 4（模拟传感器测量）
+- 每分钟通气量 = 潮气量 × 呼吸频率 / 1000（计算得出）
+- 呼吸比例 = 吸气时间 / (呼吸周期 - 吸气时间)（计算得出）
 
 **核心方法**:
 ```cpp
@@ -551,30 +623,16 @@ void startChannelTimer(...);         // 启动定时器
 void stopChannelTimer(...);          // 停止定时器
 void sendHeartData(...);             // 发送心跳数据
 void sendPressureData(...);          // 发送血压数据
-void sendBreathData(...);            // 发送呼吸数据
+void sendBreathData(...);            // 发送呼吸机数据（三模式）
 void sendHurryData(...);             // 发送紧急信号
 void sendHddData(...);               // 发送血透进度数据
-void timerEvent(QTimerEvent*);       // 定时器事件处理
 ```
 
-**HDD通道数据发送逻辑**:
-```cpp
-void sendHddData(FunctionChannel& channel) {
-    static int progress = 0;
-    progress += 5;
-    QString msg = QString("HDD:%1:%2").arg(channel.currentCommand).arg(progress);
-    serial->write(msg.toUtf8());
-    qDebug() << "HDD data sent:" << msg;
-
-    if (progress >= 100) {
-        progress = 0;
-        setChannelTransmitting(channel, false);
-        stopChannelTimer(channel);
-        QMessageBox::information(this, "提示",
-                                 QString("血透%1流程已完成").arg(channel.currentCommand));
-    }
-}
-```
+**串口接收处理**:
+- 在 `readyRead` 信号中检测 `VENT_SET:` 协议
+- 解析设定参数并更新 `m_breathChannel` 字段
+- 自动启动定时器发送实时数据
+- 检测 `VENT_STOP` 命令，停止定时器并停止数据传输
 
 ---
 
@@ -611,14 +669,18 @@ void sendHddData(FunctionChannel& channel) {
 
 3. **血透仪进度只到95%**: 已修复 `sendHddData()` 中的发送顺序，改为先增加进度再发送，确保100%能被正确发送
 
+4. **呼吸机参数分类**: 实现了完整的三模式参数分类逻辑，支持设定参数、监测参数、派生参数和N/A参数的正确显示和锁定控制
+
+5. **呼吸机模拟算法修正**: 修正了VCV模式下潮气量不应波动的问题，统一了漏气量模拟范围(20±4)，调整了PSV模式呼吸频率(13~20)和吸气时间(0.6~1.8)范围
+
+6. **呼吸机数据传输控制**: 添加了VENT_STOP命令支持，解锁时停止数据传输，锁定时重新启动；修正了receiveData()按模式区分更新，设定参数不再被模拟数据覆盖
+
 ### 8.2 代码问题
 
 1. **血透仪按钮拼写错误**: `btn_claen` 应为 `btn_clean`
 2. **资源路径不一致**: NICU 使用 `:/resource/` 和 `:/resource_inside/` 两个前缀
-3. **重复头文件包含**: `ventilator_dialog.cpp` 重复包含 `ventilator_dialog.h` 和 `ui_ventilator_dialog.h`
-4. **内存泄漏**: 主对话框中创建的子对话框未在关闭时删除
-5. **串口未打开检查**: 部分模块在串口未打开时尝试写入数据
-6. **进度值共享问题**: `sendHddData()` 中 `static int progress` 被所有 HDD 命令共享（待改进）
+3. **内存泄漏**: 主对话框中创建的子对话框未在关闭时删除
+4. **串口未打开检查**: 部分模块在串口未打开时尝试写入数据
 
 ### 8.3 改进建议
 
@@ -629,7 +691,7 @@ void sendHddData(FunctionChannel& channel) {
 5. **错误处理**: 完善异常处理和错误提示
 6. **配置文件**: 将串口配置等参数移至配置文件
 7. **数据验证**: 添加数据格式验证，防止非法数据导致崩溃
-8. **进度值改进**: 将 `progress` 变量移至 `FunctionChannel` 结构体中，避免不同命令间共享
+8. **呼吸机参数范围限制**: 为各参数添加合理的最小值和最大值限制
 
 ---
 
@@ -650,8 +712,8 @@ void sendHddData(FunctionChannel& channel) {
 ### 9.3 运行前准备
 
 1. 安装虚拟串口驱动（如 Virtual Serial Port Driver）
-2. 创建虚拟串口对（如 COM2 ↔ COM5，COM3 ↔ COM4）
-3. 先运行 Transmission 客户端，连接相应串口（血透仪选择对应串口）
+2. 创建虚拟串口对（如 COM3 ↔ COM4）
+3. 先运行 Transmission 客户端，连接相应串口
 4. 再运行 NICU 主程序
 
 ---
@@ -664,13 +726,3 @@ void sendHddData(FunctionChannel& channel) {
 | QWT | - | 图表绘制库 |
 | C++ | C++17 | 语言标准 |
 | 构建工具 | qmake | Qt 项目构建工具 |
-
----
-
-## 十一、更新记录
-
-| 日期 | 更新内容 |
-|------|----------|
-| 2026-07-01 | 添加血透仪串口通信功能，支持通过串口控制各步骤进度 |
-| 2026-07-01 | Transmission 添加 HDD 通道，支持接收命令并返回进度数据 |
-| 2026-07-01 | 修复进度条只到95%的问题 |

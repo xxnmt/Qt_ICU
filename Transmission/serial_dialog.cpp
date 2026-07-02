@@ -205,6 +205,33 @@ bool Serial_Dialog::openSerialPortForChannel(const QString& portName, FunctionCh
                         setChannelTransmitting(m_hddChannel, true);
                         startChannelTimer(m_hddChannel);
                     }
+                } else if (strData.startsWith("VENT_SET:")) {
+                    QStringList parts = strData.split(':');
+                    if (parts.size() >= 9 && m_breathChannel.isConnected && m_breathChannel.selectedPort == portName) {
+                        m_breathChannel.currentVentMode = parts[1];
+                        m_breathChannel.tidalVolume = parts[2].toDouble();
+                        m_breathChannel.respiratoryRate = parts[3].toInt();
+                        m_breathChannel.inspiratoryTime = parts[4].toDouble();
+                        m_breathChannel.riseTime = parts[5].toDouble();
+                        m_breathChannel.inspiratoryPressure = parts[6].toDouble();
+                        m_breathChannel.expiratoryPressure = parts[7].toDouble();
+                        m_breathChannel.backupRate = parts[8].toInt();
+
+                        if (m_breathChannel.isTransmitting) {
+                            stopChannelTimer(m_breathChannel);
+                        }
+
+                        setChannelTransmitting(m_breathChannel, true);
+                        startChannelTimer(m_breathChannel);
+
+                        qDebug() << "Ventilator parameters updated, mode:" << m_breathChannel.currentVentMode;
+                    }
+                } else if (strData.startsWith("VENT_STOP")) {
+                    if (m_breathChannel.isConnected && m_breathChannel.selectedPort == portName) {
+                        setChannelTransmitting(m_breathChannel, false);
+                        stopChannelTimer(m_breathChannel);
+                        qDebug() << "Ventilator stopped";
+                    }
                 }
             }
         });
@@ -436,15 +463,66 @@ void Serial_Dialog::sendBreathData(FunctionChannel& channel)
         return;
     }
 
-    QByteArray message;
-    float num1 = 140 + rand() % 10 * 1.2;
-    float num2 = 20 + rand() % 5 * 1.2;
-    QString nums = QString::number(num1, 'f', 1) + "," +
-                   QString::number(num2, 'f', 1);
-    message.append(nums.toUtf8());
-    serial->write(message);
+    QString mode = channel.currentVentMode;
+    double tidalVol = 0;
+    int respRate = 0;
+    double inspTime = 0;
+    double riseTime = 0;
+    double inspPressure = 0;
+    double expPressure = channel.expiratoryPressure;
+    int backupRate = channel.backupRate;
 
-    qDebug() << "Breath data sent to" << channel.selectedPort;
+    double leak = 0;
+    double minuteVol = 0;
+    double ieRatio = 0;
+
+    if (mode == "VCV") {
+        tidalVol = channel.tidalVolume;
+        respRate = channel.respiratoryRate;
+        inspTime = channel.inspiratoryTime;
+        riseTime = 0;
+        inspPressure = 16 + (rand() % 7 - 3);
+        leak = 20 + (rand() % 9 - 4);
+        minuteVol = tidalVol * respRate / 1000;
+        double cycleTime = 60.0 / respRate;
+        ieRatio = inspTime / (cycleTime - inspTime);
+    } else if (mode == "PCV") {
+        inspPressure = channel.inspiratoryPressure;
+        respRate = channel.respiratoryRate;
+        inspTime = channel.inspiratoryTime;
+        riseTime = channel.riseTime;
+        tidalVol = 500 + (rand() % 21 - 10);
+        leak = 20 + (rand() % 9 - 4);
+        minuteVol = tidalVol * respRate / 1000;
+        double cycleTime = 60.0 / respRate;
+        ieRatio = inspTime / (cycleTime - inspTime);
+    } else if (mode == "PSV") {
+        inspPressure = channel.inspiratoryPressure;
+        riseTime = channel.riseTime;
+        tidalVol = 500 + (rand() % 21 - 10);
+        respRate = 13 + rand() % 8;
+        inspTime = 0.6 + (rand() % 13) * 0.1;
+        leak = 20 + (rand() % 9 - 4);
+        minuteVol = tidalVol * respRate / 1000;
+        double cycleTime = 60.0 / respRate;
+        ieRatio = inspTime / (cycleTime - inspTime);
+    }
+
+    QString msg = QString("VENT_DATA:%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11")
+            .arg(mode)
+            .arg(QString::number(tidalVol, 'f', 1))
+            .arg(QString::number(leak, 'f', 1))
+            .arg(QString::number(minuteVol, 'f', 1))
+            .arg(QString::number(respRate))
+            .arg(QString::number(inspTime, 'f', 2))
+            .arg(QString::number(riseTime, 'f', 1))
+            .arg(QString::number(inspPressure, 'f', 1))
+            .arg(QString::number(expPressure, 'f', 1))
+            .arg(QString::number(backupRate))
+            .arg(QString::number(ieRatio, 'f', 2));
+
+    serial->write(msg.toUtf8());
+    qDebug() << "Breath data sent to" << channel.selectedPort << ":" << msg;
 }
 
 void Serial_Dialog::sendHurryData(FunctionChannel& channel)
@@ -581,17 +659,7 @@ void Serial_Dialog::on_btn_bloodPressure_clicked()
 
 void Serial_Dialog::on_btn_breath_clicked()
 {
-    if (!m_breathChannel.isConnected) {
-        return;
-    }
-
-    if (m_breathChannel.isTransmitting) {
-        setChannelTransmitting(m_breathChannel, false);
-        stopChannelTimer(m_breathChannel);
-    } else {
-        setChannelTransmitting(m_breathChannel, true);
-        startChannelTimer(m_breathChannel);
-    }
+    QMessageBox::information(this, "提示", "呼吸机控制已由NICU端参数设定驱动，请在NICU端操作锁定/解锁");
 }
 
 void Serial_Dialog::on_btn_hurry_clicked()

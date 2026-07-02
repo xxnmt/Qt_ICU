@@ -136,7 +136,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QLCDNumber" name="num_wet"/>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_tidalVolume">
+             <property name="maximum">
+              <double>1000.000000000000000</double>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -150,7 +154,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLCDNumber" name="num_leak"/>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_leakageVolume"/>
            </item>
           </layout>
          </item>
@@ -164,7 +168,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLCDNumber" name="num_air_min"/>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_minuteVentilation"/>
            </item>
           </layout>
          </item>
@@ -178,7 +182,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLCDNumber" name="num_breathingRate"/>
+            <widget class="QSpinBox" name="spinBox_respiratoryRate"/>
            </item>
           </layout>
          </item>
@@ -192,7 +196,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLCDNumber" name="num_breathingTime"/>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_inspiratoryTime"/>
            </item>
           </layout>
          </item>
@@ -268,13 +272,6 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_14">
          <property name="text">
@@ -282,8 +279,27 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="comboBox_ventilationMode">
+         <item>
+          <property name="text">
+           <string>容量控制</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>压力控制</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>压力辅助</string>
+          </property>
+         </item>
+        </widget>
+       </item>
        <item row="1" column="1">
-        <widget class="QLCDNumber" name="numboostTime"/>
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_riseTime"/>
        </item>
       </layout>
      </item>
@@ -296,9 +312,6 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QLCDNumber" name="num_IPAP"/>
-       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_10">
          <property name="text">
@@ -306,8 +319,11 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="1">
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_inspiratoryPressure"/>
+       </item>
        <item row="1" column="1">
-        <widget class="QLCDNumber" name="num_EPAP"/>
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_expiratoryPressure"/>
        </item>
       </layout>
      </item>
@@ -320,9 +336,6 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QLCDNumber" name="num_backupRate"/>
-       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_6">
          <property name="text">
@@ -330,8 +343,11 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="spinBox_backupRate"/>
+       </item>
        <item row="1" column="1">
-        <widget class="QLCDNumber" name="num_IERO"/>
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_ieRatio"/>
        </item>
       </layout>
      </item>

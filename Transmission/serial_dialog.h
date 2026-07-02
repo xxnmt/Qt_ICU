@@ -65,6 +65,15 @@ private:
         int dataIndex;                  // 数据索引（心跳用）
         QString currentCommand;         // 当前命令（HDD用）
 
+        QString currentVentMode;        // 当前通气模式（呼吸用：VCV/PCV/PSV）
+        double tidalVolume;             // 潮气量（ml）
+        int respiratoryRate;            // 呼吸频率（次/分）
+        double inspiratoryTime;         // 吸气时间（秒）
+        double riseTime;                // 升压时间（%）
+        double inspiratoryPressure;     // 吸气压力（cmH2O）
+        double expiratoryPressure;      // 呼气压力（cmH2O）
+        int backupRate;                 // 备用频率（次/分）
+
         FunctionChannel() {
             comboBox = nullptr;
             connectBtn = nullptr;
@@ -74,6 +83,13 @@ private:
             isTransmitting = false;
             timerId = 0;
             dataIndex = 0;
+            tidalVolume = 500;
+            respiratoryRate = 15;
+            inspiratoryTime = 1.0;
+            riseTime = 20;
+            inspiratoryPressure = 18;
+            expiratoryPressure = 5;
+            backupRate = 10;
         }
     };
 
