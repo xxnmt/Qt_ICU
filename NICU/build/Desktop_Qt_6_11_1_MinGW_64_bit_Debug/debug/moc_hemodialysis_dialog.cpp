@@ -49,7 +49,12 @@ template <> constexpr inline auto Hemodialysis_Dialog::qt_create_metaobjectdata<
         "on_btn_emergency_clicked",
         "on_btn_check_clicked",
         "on_btn_quit_clicked",
-        "updateProgress"
+        "updateProgress",
+        "serialPortInit",
+        "receiveData",
+        "updateHemoProgress",
+        "command",
+        "progress"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -73,6 +78,14 @@ template <> constexpr inline auto Hemodialysis_Dialog::qt_create_metaobjectdata<
         QtMocHelpers::SlotData<void()>(10, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'updateProgress'
         QtMocHelpers::SlotData<void()>(11, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'serialPortInit'
+        QtMocHelpers::SlotData<void()>(12, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'receiveData'
+        QtMocHelpers::SlotData<void()>(13, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'updateHemoProgress'
+        QtMocHelpers::SlotData<void(QString, int)>(14, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::QString, 15 }, { QMetaType::Int, 16 },
+        }}),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -106,10 +119,12 @@ void Hemodialysis_Dialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, 
         case 7: _t->on_btn_check_clicked(); break;
         case 8: _t->on_btn_quit_clicked(); break;
         case 9: _t->updateProgress(); break;
+        case 10: _t->serialPortInit(); break;
+        case 11: _t->receiveData(); break;
+        case 12: _t->updateHemoProgress((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<int>>(_a[2]))); break;
         default: ;
         }
     }
-    (void)_a;
 }
 
 const QMetaObject *Hemodialysis_Dialog::metaObject() const
@@ -131,14 +146,14 @@ int Hemodialysis_Dialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 13;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 10)
+        if (_id < 13)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 10;
+        _id -= 13;
     }
     return _id;
 }

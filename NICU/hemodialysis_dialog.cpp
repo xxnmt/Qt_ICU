@@ -3,21 +3,14 @@
 #include <QDebug>
 #include <QTimer>
 #include "user_data.h"
-int percent=0;
 extern User_Data user;
+
 Hemodialysis_Dialog::Hemodialysis_Dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Hemodialysis_Dialog)
 {
     ui->setupUi(this);
-
-    // // ✅ 清空 lab_e 的样式表，防止显示黑色方块
-    // ui->lab_e->setStyleSheet("");
-    // ui->lab_e->clear();
-////////////////////////该方式无用//////////////////////////////
     setWindowTitle(QString::fromUtf8("血透仪"));
-    //无边框
-    //setWindowFlags(Qt::FramelessWindowHint);
     ui->namelabel->setText(user.getName());
     ui->agelabel->setText(QString::number(user.getAge()));
     ui->btn_connectD->setEnabled(0);
@@ -30,11 +23,15 @@ Hemodialysis_Dialog::Hemodialysis_Dialog(QWidget *parent) :
     ui->progressBar_blood->setValue(0);
     ui->progressBar_check->setValue(0);
     drawRoundProgress();
+    serialPortInit();
 }
 
 Hemodialysis_Dialog::~Hemodialysis_Dialog()
 {
-
+    if (m_serial) {
+        m_serial->serialClose();
+        delete m_serial;
+    }
     delete ui;
 }
 
@@ -51,73 +48,110 @@ void Hemodialysis_Dialog::drawRoundProgress()
     ui->gridLayout->addWidget(m_startBar,0,1);
 }
 
-void Hemodialysis_Dialog::on_btn_open_clicked()
+void Hemodialysis_Dialog::serialPortInit()
 {
-    delete m_splash;
-    m_splash=new ProgressBar_Splash(5000,ui->progressBar_blood,NULL);
-    //progressbar_splash调用show()会出现黑框
-    //m_splash->show();
+    m_serial = new Serial_Tool();
+    m_serial->m_serialport = new QSerialPort(this);
+    m_serial->serialOpen("COM2");
+    connect(m_serial->m_serialport, SIGNAL(readyRead()), this, SLOT(receiveData()));
 }
 
+void Hemodialysis_Dialog::receiveData()
+{
+    QByteArray data = m_serial->m_serialport->readAll();
+    QString strData = QString::fromLocal8Bit(data);
+    QStringList parts = strData.split(':');
+    if (parts.size() >= 3 && parts[0] == "HDD") {
+        QString command = parts[1];
+        int progress = parts[2].toInt();
+        updateHemoProgress(command, progress);
+    }
+}
+
+void Hemodialysis_Dialog::updateHemoProgress(QString command, int progress)
+{
+    if (command == "check") {
+        ui->progressBar_check->setValue(progress);
+        if (progress >= 100) {
+            ui->btn_claen->setEnabled(1);
+        }
+    } else if (command == "clean") {
+        ui->progressBar_clean->setValue(progress);
+        if (progress >= 100) {
+            ui->btn_connectD->setEnabled(1);
+        }
+    } else if (command == "connectD") {
+        ui->progressBar_D->setValue(progress);
+        if (progress >= 100) {
+            ui->btn_connectJ->setEnabled(1);
+        }
+    } else if (command == "connectJ") {
+        ui->progressBar_J->setValue(progress);
+        if (progress >= 100) {
+            ui->btn_open->setEnabled(1);
+        }
+    } else if (command == "open") {
+        ui->progressBar_blood->setValue(progress);
+        if (progress >= 100) {
+            ui->btn_fill->setEnabled(1);
+        }
+    } else if (command == "fill") {
+        m_fillBar->setValue(progress);
+        if (progress >= 100) {
+            ui->btn_start->setEnabled(1);
+        }
+    } else if (command == "start") {
+        m_startBar->setValue(progress);
+    }
+}
+
+void Hemodialysis_Dialog::on_btn_open_clicked()
+{
+    m_currentCommand = "open";
+    m_serial->m_serialport->write("HDD:open");
+}
 
 void Hemodialysis_Dialog::on_btn_connectJ_clicked()
 {
-    delete m_splash;
-    m_splash = new ProgressBar_Splash(5000,ui->progressBar_J,ui->btn_open);
-    //m_splash->show();
+    m_currentCommand = "connectJ";
+    m_serial->m_serialport->write("HDD:connectJ");
 }
-
 
 void Hemodialysis_Dialog::on_btn_connectD_clicked()
 {
-    m_splash = new ProgressBar_Splash(5000,ui->progressBar_D,ui->btn_connectJ);
-    //m_splash->show();
+    m_currentCommand = "connectD";
+    m_serial->m_serialport->write("HDD:connectD");
 }
 
 void Hemodialysis_Dialog::on_btn_claen_clicked()
 {
-    m_splash = new ProgressBar_Splash(5000,ui->progressBar_clean,ui->btn_connectD);
-    //m_splash->show();
+    m_currentCommand = "clean";
+    m_serial->m_serialport->write("HDD:clean");
 }
-
 
 void Hemodialysis_Dialog::on_btn_fill_clicked()
 {
-    m_fillBar->setValue(100);
+    m_currentCommand = "fill";
+    m_serial->m_serialport->write("HDD:fill");
 }
-
 
 void Hemodialysis_Dialog::on_btn_start_clicked()
 {
-    m_startBar->setValue(100);
+    m_currentCommand = "start";
+    m_serial->m_serialport->write("HDD:start");
 }
-
 
 void Hemodialysis_Dialog::on_btn_emergency_clicked()
 {
-    // 图片显示异常，不会修复
-    //  ui->lab_e->setStyleSheet("border-image:
-    //  url(:/resource_inside/images/blood.png);");
+    m_serial->m_serialport->write("HDD:emergency");
     ui->lab_e->setStyleSheet("background-color: rgb(255, 0, 0);");
 }
 
-
 void Hemodialysis_Dialog::on_btn_check_clicked()
 {
-    //删除旧定时器
-    if (m_timer) {
-        m_timer->stop();
-        delete m_timer;
-        m_timer=nullptr;
-    }
-    percent=0;
-
-    m_timer = new QTimer(this);
-    connect(m_timer,SIGNAL(timeout()),this, SLOT(updateProgress()));
-    m_timer->start(100);
-
+    m_currentCommand = "check";
+    m_serial->m_serialport->write("HDD:check");
 }
-
 
 void Hemodialysis_Dialog::on_btn_quit_clicked()
 {
@@ -126,15 +160,4 @@ void Hemodialysis_Dialog::on_btn_quit_clicked()
 
 void Hemodialysis_Dialog::updateProgress()
 {
-    if(percent>=100)
-    {
-        m_timer->stop();
-            ui->btn_claen->setEnabled(1);
-        return;
-    }
-    else
-        percent+=5;
-    ui->progressBar_check->setValue(percent);
 }
-
-

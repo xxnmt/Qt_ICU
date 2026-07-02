@@ -1,0 +1,676 @@
+# NICU 重症监护室设备模拟系统 - 项目文档
+
+## 一、项目概述
+
+本项目是一个基于 Qt 6 的重症监护室（NICU）设备模拟系统，包含心电图仪、血压仪、血液透析仪和呼吸机四个主要医疗设备模块，以及一个配套的数据传输客户端用于模拟串口数据发送。
+
+### 技术栈
+
+- **框架**: Qt 6.11.1 (C++17)
+- **UI框架**: Qt Widgets
+- **串口通信**: Qt Serial Port
+- **图表绘制**: QWT 库
+- **构建工具**: qmake + MinGW 64-bit
+
+---
+
+## 二、项目结构
+
+```
+Ot_MainWin_system/
+├── NICU/                          # 主应用程序（重症监护室设备模拟器）
+│   ├── main.cpp                   # 程序入口
+│   ├── NICU.pro                   # Qt 项目配置文件
+│   ├── Resource.qrc               # 资源文件配置
+│   ├── main_dialog.cpp/h          # 主对话框（功能入口）
+│   ├── ecgtest_dialog.cpp/h/ui   # 心电图模块
+│   ├── bloodpressure_dialog.cpp/h/ui # 血压仪模块
+│   ├── hemodialysis_dialog.cpp/h/ui # 血透仪模块（已添加串口通信）
+│   ├── ventilator_dialog.cpp/h/ui # 呼吸机模块
+│   ├── bloodpressure.cpp/h        # 血压数据处理类
+│   ├── heart_data.cpp/h           # 心电数据类
+│   ├── user_data.cpp/h            # 用户数据类
+│   ├── serial_tool.cpp/h          # 串口工具类
+│   ├── alarm_light.cpp/h          # 报警灯组件
+│   ├── plot_data.cpp/h            # QWT 绘图数据类
+│   ├── progressbar_round.cpp/h    # 圆形进度条组件
+│   ├── progressbar_splash.cpp/h   # 进度条动画组件
+│   ├── progressbar_check.cpp/h    # 检查进度条组件
+│   ├── All_Header.h              # 头文件汇总
+│   ├── build/                     # 构建输出目录
+│   └── resource_inside/          # 内部资源文件
+├── Transmission/                  # 数据传输客户端（已添加HDD通道）
+│   ├── main.cpp                  # 程序入口
+│   ├── Transmission.pro          # Qt 项目配置文件
+│   └── serial_dialog.cpp/h/ui    # 串口数据发送界面
+└── resource/                      # 共享资源文件
+    ├── images/                   # 图片资源
+    └── heartData/                # 心电历史数据
+```
+
+---
+
+## 三、总体功能实现方式
+
+### 3.1 系统架构
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Main_Dialog (主界面)                    │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
+│  │ 心电图    │ │ 血压仪    │ │ 血透仪    │ │ 呼吸机    │      │
+│  └────┬─────┘ └────┬─────┘ └────┬─────┘ └────┬─────┘      │
+└───────┼────────────┼────────────┼────────────┼────────────┘
+        │            │            │            │
+        ▼            ▼            ▼            ▼
+┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+│ECGTest_Dialog││BloodPressure││Hemodialysis ││Ventilator   │
+│             ││_Dialog      ││_Dialog      ││_Dialog      │
+└───────┬─────┘ └───────┬─────┘ └───────┬─────┘ └───────┬─────┘
+        │               │               │               │
+        ▼               ▼               ▼               ▼
+┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+│Heart_Data   ││BloodPressure││Serial_Tool  ││Alarm_Light  │
+│(12导联数据) ││(QWT绘图)    ││(串口通信)   ││(状态指示灯) │
+└───────┬─────┘ └───────┬─────┘ └─────────────┘ └───────┬─────┘
+        │               │                               │
+        └───────────────┼───────────────────────────────┘
+                        ▼
+              ┌─────────────────┐
+              │ Serial_Tool     │
+              │ (串口通信模块)   │
+              └─────────────────┘
+```
+
+### 3.2 数据流向
+
+1. **数据传输客户端 (Transmission)** 通过虚拟串口发送模拟医疗数据
+2. **NICU 主程序** 通过 `Serial_Tool` 接收串口数据
+3. 各设备模块处理接收到的数据并更新 UI 显示
+
+### 3.3 串口通信协议
+
+| 设备 | 串口 | 波特率 | 数据格式 |
+|------|------|--------|----------|
+| 心电图 | COM4 | 115200 | 12个整数，逗号分隔 |
+| 血压仪 | COM3 | 115200 | 3字节（高压/低压/脉搏） |
+| 呼吸机 | COM4 | 115200 | 字符串（湿化/泄漏）或 'e'（紧急） |
+| 血透仪 | COM2 | 115200 | 命令格式: `HDD:<command>`，进度格式: `HDD:<command>:<progress>` |
+
+---
+
+## 四、各模块详细说明
+
+### 4.1 主对话框 (Main_Dialog)
+
+**文件**: `main_dialog.cpp/h`
+
+**功能**: 系统主界面，提供四个医疗设备的入口按钮。
+
+**UI 控件**:
+- `btn_Heart` - 心电图按钮
+- `btn_Pressure` - 血压仪按钮
+- `btn_Blood` - 血透仪按钮
+- `btn_Breath` - 呼吸机按钮
+- `btn_Quit` - 退出按钮
+
+**核心方法**:
+```cpp
+void on_btn_Heart_clicked();      // 打开心电图模块
+void on_btn_Pressure_clicked();    // 打开血压仪模块
+void on_btn_Blood_clicked();       // 打开血透仪模块
+void on_btn_Breath_clicked();      // 打开呼吸机模块
+void on_btn_Quit_clicked();        // 退出程序
+```
+
+**设计要点**:
+- 使用 Qt Fusion 风格统一渲染
+- 关闭硬件 OpenGL 加速解决显卡驱动问题
+
+---
+
+### 4.2 心电图模块 (ECGTest_Dialog)
+
+**文件**: `ecgtest_dialog.cpp/h/ui`
+
+**功能**: 12导联心电图实时显示，支持历史数据加载和串口实时数据接收。
+
+**核心数据结构**:
+- `User_DataArr` - JSON 格式的历史心电图数据
+- `User_ChannelData[12]` - 12个导联的数据对象数组
+- `User_newdata` - 串口接收到的实时数据
+- `User_serialflag` - 串口数据标志
+
+**核心方法**:
+```cpp
+void readECGFile(QString FileName);     // 读取历史数据文件
+void getHistoryData();                  // 获取历史数据
+void drawHisECGWave(QPainter&,int,int,double); // 绘制历史波形
+void updateECGWave(QPainter&,int,int,double); // 更新实时波形
+void drawECGGrid(QPainter&,int,int,double);   // 绘制网格
+void receiveData();                     // 串口数据接收槽
+```
+
+**显示布局**:
+- 2列 × 6行 = 12个导联显示区域
+- 每个导联显示波形曲线和通道名称
+- 网格线间距为 5 像素，粗线间隔为 25 像素
+
+**串口通信**:
+- 端口: COM4
+- 数据格式: `16,12,9,8,6,34,20,22,20,16,12,9`（12个通道数据，逗号分隔）
+
+**资源文件**:
+- 历史数据路径: `:/hisdata`（通过 Resource.qrc 配置）
+
+---
+
+### 4.3 血压仪模块 (BloodPressure_Dialog)
+
+**文件**: `bloodpressure_dialog.cpp/h/ui`
+
+**功能**: 血压数据实时监测，包含高压、低压、脉搏三个参数的数值显示和曲线绘制。
+
+**核心数据结构**:
+- `m_bloodPressure` - 血压数据处理对象
+- 三个 `QLCDNumber` 显示高压、低压、脉搏
+
+**核心方法**:
+```cpp
+void initBP();                // 初始化血压数据
+void on_btn_quit_clicked();   // 退出并关闭串口
+```
+
+**血压处理类 (BloodPressure)**:
+**文件**: `bloodpressure.cpp/h`
+
+**功能**: 使用 QWT 库绘制血压曲线，管理三个数据系列（高压/低压/脉搏）。
+
+**核心组件**:
+- `QwtPlot` - 绘图控件
+- `QwtPlotCurve` - 曲线对象（3条曲线）
+- `Plot_Data` - 数据存储类（3个实例）
+- `QwtPlotGrid` - 网格
+- `QwtPlotPanner` - 平移功能
+- `QwtPlotMagnifier` - 缩放功能
+
+**核心方法**:
+```cpp
+void buildPlot();                     // 构建绘图组件
+void drawHistoryData(...);            // 绘制历史数据
+void addCurve();                      // 添加曲线
+void serialPortInit();                // 初始化串口
+void receiveData();                   // 数据接收槽
+void updateCurve(QByteArray);         // 更新曲线数据
+```
+
+**串口通信**:
+- 端口: COM3
+- 数据格式: 3字节二进制数据（高压/低压/脉搏）
+
+---
+
+### 4.4 血透仪模块 (Hemodialysis_Dialog)
+
+**文件**: `hemodialysis_dialog.cpp/h/ui`
+
+**功能**: 血液透析流程模拟，包含设备自检、管道连接、清洗、预充、治疗等步骤，支持串口通信控制。
+
+**核心组件**:
+- `Serial_Tool` - 串口通信工具（新增）
+- `ProgressBar_Splash` - 进度条动画
+- `ProgressBar_Round` - 圆形进度条（用于填充和开始按钮）
+- `QTimer` - 定时器
+
+**UI 控件**:
+- `btn_check` - 自检按钮
+- `btn_claen` - 清洗按钮（显示为 claen，应为 clean）
+- `btn_connectD` - 连接动脉按钮
+- `btn_connectJ` - 连接静脉按钮
+- `btn_open` - 开泵按钮
+- `btn_fill` - 预充按钮
+- `btn_start` - 开始治疗按钮
+- `btn_emergency` - 紧急停止按钮
+
+**流程控制**:
+```
+自检 → 清洗 → 连接动脉 → 连接静脉 → 开泵 → 预充 → 开始治疗
+```
+
+**核心方法**:
+```cpp
+void serialPortInit();               // 初始化串口
+void receiveData();                  // 接收串口数据
+void updateHemoProgress(...);        // 根据进度更新UI
+void on_btn_check_clicked();         // 发送自检命令
+void on_btn_claen_clicked();         // 发送清洗命令
+void on_btn_connectD_clicked();      // 发送连接动脉命令
+void on_btn_connectJ_clicked();      // 发送连接静脉命令
+void on_btn_open_clicked();          // 发送开泵命令
+void on_btn_fill_clicked();          // 发送预充命令
+void on_btn_start_clicked();         // 发送开始治疗命令
+void on_btn_emergency_clicked();     // 发送紧急停止命令
+void drawRoundProgress();            // 绘制圆形进度条
+```
+
+**串口通信**:
+- 端口: COM2（在构造函数中自动初始化并打开）
+- 命令格式: `HDD:<command>`（发送到Transmission）
+- 进度格式: `HDD:<command>:<progress>`（从Transmission接收）
+
+**串口初始化流程**:
+```cpp
+void serialPortInit() {
+    m_serial = new Serial_Tool();
+    m_serial->m_serialport = new QSerialPort(this);
+    m_serial->serialOpen("COM2");
+    connect(m_serial->m_serialport, SIGNAL(readyRead()), this, SLOT(receiveData()));
+}
+```
+
+**命令列表**:
+| 命令 | 对应按钮 | 进度完成后启用按钮 |
+|------|----------|-------------------|
+| `HDD:check` | btn_check | btn_claen |
+| `HDD:clean` | btn_claen | btn_connectD |
+| `HDD:connectD` | btn_connectD | btn_connectJ |
+| `HDD:connectJ` | btn_connectJ | btn_open |
+| `HDD:open` | btn_open | btn_fill |
+| `HDD:fill` | btn_fill | btn_start |
+| `HDD:start` | btn_start | - |
+| `HDD:emergency` | btn_emergency | - |
+
+---
+
+### 4.5 呼吸机模块 (Ventilator_Dialog)
+
+**文件**: `ventilator_dialog.cpp/h/ui`
+
+**功能**: 呼吸机监控界面，显示呼吸参数和状态指示灯。
+
+**核心组件**:
+- `Alarm_Light` - 报警灯组件（绿/黄/红/橙四种状态）
+- `QMovie` - GIF 动画显示呼吸波形
+- `Serial_Tool` - 串口通信
+
+**UI 控件**:
+- `lab_Gif` - 呼吸动画显示
+- `num_wet` - 湿化数值显示
+- `num_leak` - 泄漏数值显示
+- `widget_light` - 状态指示灯
+- `btn_lock` - 锁定/解锁按钮
+
+**核心方法**:
+```cpp
+void showGif();                  // 显示呼吸动画
+void showInfo(QByteArray);       // 解析并显示参数
+void serialportInit();           // 初始化串口
+void alarmLight();               // 初始化报警灯
+void updateLight();              // 灯状态切换槽
+void receiveDataa();             // 串口数据接收槽
+```
+
+**灯状态说明**:
+| 状态 | 颜色 | 含义 |
+|------|------|------|
+| 0→1 | 绿→黄 | 正常工作状态循环 |
+| 2→3 | 红→橙 | 紧急状态循环（接收到 'e' 信号） |
+
+**串口通信**:
+- 端口: COM4
+- 数据格式: `140.5,22.3`（湿化值,泄漏值）或 `e`（紧急信号）
+
+---
+
+## 五、公共组件
+
+### 5.1 串口工具类 (Serial_Tool)
+
+**文件**: `serial_tool.cpp/h`
+
+**功能**: 封装串口通信功能，提供打开/关闭串口方法。
+
+**核心方法**:
+```cpp
+bool serialOpen(QString com);    // 打开指定串口
+void serialClose();              // 关闭串口
+```
+
+**成员变量**:
+- `m_serialport` - QSerialPort 对象指针
+
+**配置参数**:
+- 波特率: 115200
+- 数据位: 8
+- 校验位: 无
+- 停止位: 1
+
+---
+
+### 5.2 用户数据类 (User_Data)
+
+**文件**: `user_data.cpp/h`
+
+**功能**: 存储患者基本信息（姓名、年龄）。
+
+**核心方法**:
+```cpp
+void setName(QString);           // 设置姓名
+void setAge(int);                // 设置年龄
+QString getName();               // 获取姓名
+int getAge();                    // 获取年龄
+```
+
+**全局实例**:
+```cpp
+extern User_Data user;           // 在 ecgtest_dialog.cpp 中定义
+```
+
+---
+
+### 5.3 心电数据类 (Heart_Data)
+
+**文件**: `heart_data.cpp/h`
+
+**功能**: 存储单个导联的心电图数据。
+
+**核心方法**:
+```cpp
+void setChannelName(QString);    // 设置通道名称
+void setDataArr(QJsonArray);     // 设置数据数组
+void addData(int);               // 添加新数据点
+QString getChannelName() const;  // 获取通道名称
+QJsonArray getDataArr() const;   // 获取数据数组
+```
+
+**成员变量**:
+- `User_ChannelName` - 通道名称
+- `User_DataArr` - 数据数组（QJsonArray）
+
+**数据管理**:
+- 最大存储 310 个数据点（MAX_DATA）
+- 超过限制时自动移除最旧数据
+
+---
+
+### 5.4 报警灯组件 (Alarm_Light)
+
+**文件**: `alarm_light.cpp/h`
+
+**功能**: 自定义圆形指示灯组件，支持四种颜色状态。
+
+**核心方法**:
+```cpp
+void setRedLight();              // 设置红色
+void setYellowLight();           // 设置黄色
+void setGreenLight();            // 设置绿色
+void setOrangeLight();           // 设置橙色
+void setBackgroundColor(QColor); // 设置背景色
+```
+
+**绘制方式**:
+- 使用 QPainter 绘制圆形
+- 外层边框使用渐变效果
+- 内层为实心圆形
+
+---
+
+### 5.5 绘图数据类 (Plot_Data)
+
+**文件**: `plot_data.cpp/h`
+
+**功能**: 继承 QwtSeriesData，提供数据点存储和访问接口。
+
+**核心方法**:
+```cpp
+size_t size() const;             // 返回数据点数量
+QPointF sample(size_t i) const;  // 返回第i个数据点
+void setParam(int, double);      // 设置采样参数
+void addBaseData(quint64, QVector<unsigned char>); // 添加历史数据
+bool updateCurveData(unsigned char); // 更新单个数据点
+QwtInterval getXInterval();      // 获取X轴范围
+```
+
+**成员变量**:
+- `m_value` - 数据点向量（QVector<QPointF>）
+- `m_sampleRate` - 采样率（Hz）
+- `m_xWidth` - X轴显示宽度（秒）
+- `m_maxCount` - 最大数据点数
+
+---
+
+### 5.6 圆形进度条组件 (ProgressBar_Round)
+
+**文件**: `progressbar_round.cpp/h`
+
+**功能**: 自定义圆形进度条，支持动画效果。
+
+**核心方法**:
+```cpp
+void setValue(float);            // 设置进度值（带动画）
+void setInColor(QColor);         // 设置内部颜色
+void setOutColor(QColor);        // 设置外部颜色
+void paintOutterBar(QPainter&);  // 绘制外圈
+void paintInnerBar(QPainter&);   // 绘制内圈（进度）
+void paintText(QPainter&);       // 绘制百分比文字
+```
+
+**特性**:
+- 使用 QPropertyAnimation 实现平滑动画
+- 进度范围: 0-100
+- 动画时长: 2000ms
+
+---
+
+### 5.7 进度条动画组件 (ProgressBar_Splash)
+
+**文件**: `progressbar_splash.cpp/h`
+
+**功能**: 基于 QSplashScreen 的进度条动画，用于血透仪各步骤。
+
+**核心方法**:
+```cpp
+void generateNumber();           // 生成 1-100 数字列表
+void updateProgress();           // 更新进度
+void timerEvent(QTimerEvent*);   // 定时器事件处理
+```
+
+**构造参数**:
+- `time` - 总时长（毫秒）
+- `progressbar` - 关联的 QProgressBar 控件
+- `btn` - 进度完成后启用的按钮（可为 NULL）
+
+---
+
+### 5.8 检查进度条组件 (ProgressBar_Check)
+
+**文件**: `progressbar_check.cpp/h`
+
+**功能**: 自定义进度条，使用图片绘制背景和进度条。
+
+**核心方法**:
+```cpp
+void PaintEvent(QPaintEvent*);   // 绘制进度条
+```
+
+**绘制方式**:
+- 背景: `:/resource_inside/images/progress_back.png`
+- 进度: `:/resource_inside/images/progress_front.png`
+- 右侧显示百分比文字
+
+---
+
+## 六、数据传输客户端 (Transmission)
+
+**文件**: `serial_dialog.cpp/h/ui`
+
+**功能**: 模拟医疗设备数据发送，支持五个功能通道的串口数据传输。
+
+**核心数据结构**:
+```cpp
+struct FunctionChannel {
+    QString functionName;        // 功能名称
+    QComboBox* comboBox;         // 串口选择器
+    QPushButton* connectBtn;     // 连接按钮
+    QPushButton* transmitBtn;    // 传输按钮
+    QLabel* statusLabel;         // 状态指示灯
+    QString selectedPort;        // 当前串口
+    bool isConnected;            // 连接状态
+    bool isTransmitting;         // 传输状态
+    int timerId;                 // 定时器ID
+    QString currentCommand;      // 当前命令（HDD专用）
+};
+```
+
+**功能通道**:
+| 通道 | 功能 | 定时器间隔 | 数据格式 |
+|------|------|-----------|----------|
+| m_heartChannel | 心跳/心电图 | 200ms | 12个整数，逗号分隔 |
+| m_pressureChannel | 血压 | 1000ms | 3字节二进制 |
+| m_breathChannel | 呼吸 | 1000ms | 两个浮点数，逗号分隔 |
+| m_hurryChannel | 紧急 | 单次发送 | 'e' 字符 |
+| m_hddChannel | 血透仪 | 100ms | `HDD:<command>:<progress>` |
+
+**串口管理**:
+- 使用 `QMap<QString, QSerialPort*>` 管理串口对象
+- 使用引用计数 `QMap<QString, int>` 支持串口共享
+- 心跳和血压不允许共享串口
+- 呼吸、紧急和血透之间可以共享串口
+
+**串口接收处理**:
+- 在 `openSerialPortForChannel()` 中连接 `readyRead` 信号
+- 检测 `HDD:` 前缀命令，提取命令内容
+- 设置 `currentCommand` 并启动定时器发送进度数据
+
+**核心方法**:
+```cpp
+void initChannels();                 // 初始化通道
+void openSerialPortForChannel(...);  // 打开串口
+void closeSerialPortForChannel(...); // 关闭串口
+void startChannelTimer(...);         // 启动定时器
+void stopChannelTimer(...);          // 停止定时器
+void sendHeartData(...);             // 发送心跳数据
+void sendPressureData(...);          // 发送血压数据
+void sendBreathData(...);            // 发送呼吸数据
+void sendHurryData(...);             // 发送紧急信号
+void sendHddData(...);               // 发送血透进度数据
+void timerEvent(QTimerEvent*);       // 定时器事件处理
+```
+
+**HDD通道数据发送逻辑**:
+```cpp
+void sendHddData(FunctionChannel& channel) {
+    static int progress = 0;
+    progress += 5;
+    QString msg = QString("HDD:%1:%2").arg(channel.currentCommand).arg(progress);
+    serial->write(msg.toUtf8());
+    qDebug() << "HDD data sent:" << msg;
+
+    if (progress >= 100) {
+        progress = 0;
+        setChannelTransmitting(channel, false);
+        stopChannelTimer(channel);
+        QMessageBox::information(this, "提示",
+                                 QString("血透%1流程已完成").arg(channel.currentCommand));
+    }
+}
+```
+
+---
+
+## 七、资源文件
+
+### 7.1 图片资源
+
+| 图片 | 用途 |
+|------|------|
+| back.png | 返回按钮 |
+| blood.png | 血液相关图标 |
+| breath.png | 呼吸相关图标 |
+| breathgif.gif | 呼吸动画 |
+| heart.png | 心脏图标 |
+| pressure.png | 血压图标 |
+| progress_back.png | 进度条背景 |
+| progress_front.png | 进度条前景 |
+| lock/unlock.png | 锁定按钮图标 |
+| quit.png | 退出按钮图标 |
+
+### 7.2 数据资源
+
+- `hisdata.txt` - 心电图历史数据（JSON 格式）
+
+---
+
+## 八、已知问题与改进建议
+
+### 8.1 已修复问题
+
+1. **心电图索引越界崩溃**: 在 `drawHisECGWave()` 和 `updateECGWave()` 中添加了边界检查（`i < User_newdata.size()`），防止访问超出列表范围的元素
+
+2. **心电数据空指针崩溃**: 修改 `readECGFile()`，确保即使文件打开失败也调用 `getHistoryData()`，初始化所有12个 `User_ChannelData` 元素
+
+3. **血透仪进度只到95%**: 已修复 `sendHddData()` 中的发送顺序，改为先增加进度再发送，确保100%能被正确发送
+
+### 8.2 代码问题
+
+1. **血透仪按钮拼写错误**: `btn_claen` 应为 `btn_clean`
+2. **资源路径不一致**: NICU 使用 `:/resource/` 和 `:/resource_inside/` 两个前缀
+3. **重复头文件包含**: `ventilator_dialog.cpp` 重复包含 `ventilator_dialog.h` 和 `ui_ventilator_dialog.h`
+4. **内存泄漏**: 主对话框中创建的子对话框未在关闭时删除
+5. **串口未打开检查**: 部分模块在串口未打开时尝试写入数据
+6. **进度值共享问题**: `sendHddData()` 中 `static int progress` 被所有 HDD 命令共享（待改进）
+
+### 8.3 改进建议
+
+1. **统一资源管理**: 使用单一资源前缀，整理资源文件结构
+2. **内存管理优化**: 使用 `QScopedPointer` 或智能指针管理动态分配对象
+3. **串口状态检查**: 在写入前检查串口是否打开
+4. **日志系统**: 添加日志记录功能，便于调试和问题追踪
+5. **错误处理**: 完善异常处理和错误提示
+6. **配置文件**: 将串口配置等参数移至配置文件
+7. **数据验证**: 添加数据格式验证，防止非法数据导致崩溃
+8. **进度值改进**: 将 `progress` 变量移至 `FunctionChannel` 结构体中，避免不同命令间共享
+
+---
+
+## 九、编译与运行
+
+### 9.1 编译环境
+
+- Qt 6.11.1 (MinGW 64-bit)
+- QWT 库（需安装并配置 INCLUDEPATH 和 LIBS）
+
+### 9.2 编译步骤
+
+1. 打开 Qt Creator，导入 `NICU.pro` 或 `Transmission.pro`
+2. 配置构建套件为 Desktop Qt 6.11.1 MinGW 64-bit
+3. 构建项目（Debug 或 Release）
+4. 运行生成的可执行文件
+
+### 9.3 运行前准备
+
+1. 安装虚拟串口驱动（如 Virtual Serial Port Driver）
+2. 创建虚拟串口对（如 COM2 ↔ COM5，COM3 ↔ COM4）
+3. 先运行 Transmission 客户端，连接相应串口（血透仪选择对应串口）
+4. 再运行 NICU 主程序
+
+---
+
+## 十、版本信息
+
+| 项目 | 版本 | 说明 |
+|------|------|------|
+| Qt | 6.11.1 | 主框架版本 |
+| QWT | - | 图表绘制库 |
+| C++ | C++17 | 语言标准 |
+| 构建工具 | qmake | Qt 项目构建工具 |
+
+---
+
+## 十一、更新记录
+
+| 日期 | 更新内容 |
+|------|----------|
+| 2026-07-01 | 添加血透仪串口通信功能，支持通过串口控制各步骤进度 |
+| 2026-07-01 | Transmission 添加 HDD 通道，支持接收命令并返回进度数据 |
+| 2026-07-01 | 修复进度条只到95%的问题 |

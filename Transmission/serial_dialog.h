@@ -63,6 +63,7 @@ private:
         bool isTransmitting;            // 是否正在传输数据
         int timerId;                    // 定时器ID
         int dataIndex;                  // 数据索引（心跳用）
+        QString currentCommand;         // 当前命令（HDD用）
 
         FunctionChannel() {
             comboBox = nullptr;
@@ -76,11 +77,12 @@ private:
         }
     };
 
-    // 四个功能通道
+    // 五个功能通道
     FunctionChannel m_heartChannel;
     FunctionChannel m_pressureChannel;
     FunctionChannel m_breathChannel;
     FunctionChannel m_hurryChannel;
+    FunctionChannel m_hddChannel;
 
     // 串口管理：key为端口名，value为串口对象
     QMap<QString, QSerialPort*> m_serialPorts;
@@ -104,7 +106,7 @@ private:
     void updateChannelUI(FunctionChannel& channel);
     void setChannelConnected(FunctionChannel& channel, bool connected);
     void setChannelTransmitting(FunctionChannel& channel, bool transmitting);
-    QString getTransmitButtonText(const FunctionChannel& channel) const;  // 【修改】添加const，使用const引用
+    QString getTransmitButtonText(const FunctionChannel& channel) const;
 
     // 定时器管理
     void startChannelTimer(FunctionChannel& channel);
@@ -116,13 +118,15 @@ private:
     void sendPressureData(FunctionChannel& channel);
     void sendBreathData(FunctionChannel& channel);
     void sendHurryData(FunctionChannel& channel);
+    void sendHddData(FunctionChannel& channel);
 
     // 获取通道对应的定时器类型
     enum TimerType {
         TimerHeart = 1,
         TimerPressure = 2,
         TimerBreath = 3,
-        TimerHurry = 4
+        TimerHurry = 4,
+        TimerHDD = 5
     };
     TimerType getTimerType(FunctionChannel& channel);
 };

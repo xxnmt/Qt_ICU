@@ -5,6 +5,8 @@
 #include "progressbar_check.h"
 #include "progressbar_round.h"
 #include "progressbar_splash.h"
+#include "serial_tool.h"
+
 namespace Ui {
 class Hemodialysis_Dialog;
 }
@@ -30,16 +32,20 @@ private slots:
     void on_btn_check_clicked();
     void on_btn_quit_clicked();
     void updateProgress();
-
+    void serialPortInit();
+    void receiveData();
+    void updateHemoProgress(QString command, int progress);
 
 private:
     Ui::Hemodialysis_Dialog *ui;
 
-    QTimer *m_timer = nullptr;        // ← 直接初始化
+    QTimer *m_timer = nullptr;
     ProgressBar_Splash *m_splash = nullptr;
     ProgressBar_Round *m_fillBar = nullptr;
     ProgressBar_Round *m_startBar = nullptr;
 
+    Serial_Tool *m_serial = nullptr;
+    QString m_currentCommand;
 };
 
 #endif // HEMODIALYSIS_DIALOG_H

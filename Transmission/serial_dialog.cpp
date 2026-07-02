@@ -56,7 +56,6 @@ void Serial_Dialog::initChannels()
     m_heartChannel.comboBox = ui->comboBox_heart;
     m_heartChannel.connectBtn = ui->btn_connect_heart;
     m_heartChannel.transmitBtn = ui->btn_heart;
-    // 【修正】使用正确的控件名称 lab_status_heartCOM
     m_heartChannel.statusLabel = ui->lab_status_heartCOM;
 
     // 血压通道
@@ -64,7 +63,6 @@ void Serial_Dialog::initChannels()
     m_pressureChannel.comboBox = ui->comboBox_bloodPressure;
     m_pressureChannel.connectBtn = ui->btn_connect_bloodPressure;
     m_pressureChannel.transmitBtn = ui->btn_bloodPressure;
-    // 【修正】使用正确的控件名称 lab_status_bloodpressure（小写）
     m_pressureChannel.statusLabel = ui->lab_status_bloodpressure;
 
     // 呼吸通道
@@ -81,11 +79,19 @@ void Serial_Dialog::initChannels()
     m_hurryChannel.transmitBtn = ui->btn_hurry;
     m_hurryChannel.statusLabel = ui->lab_status_hurry;
 
+    // HDD通道（血透仪）
+    m_hddChannel.functionName = "血透";
+    m_hddChannel.comboBox = ui->comboBox_connect_HDD;
+    m_hddChannel.connectBtn = ui->btn_HDD;
+    m_hddChannel.transmitBtn = ui->btn_HDD_2;
+    m_hddChannel.statusLabel = ui->lab_staus_HDD;
+
     // 设置初始UI状态
     setChannelConnected(m_heartChannel, false);
     setChannelConnected(m_pressureChannel, false);
     setChannelConnected(m_breathChannel, false);
     setChannelConnected(m_hurryChannel, false);
+    setChannelConnected(m_hddChannel, false);
 }
 
 void Serial_Dialog::refreshAllComboBoxes()
@@ -139,41 +145,33 @@ QSerialPort* Serial_Dialog::getSerialPort(const QString& portName)
 
 bool Serial_Dialog::openSerialPortForChannel(const QString& portName, FunctionChannel& channel)
 {
-    // 判断当前功能是否允许共享
     bool allowShare = false;
-    if (&channel == &m_breathChannel || &channel == &m_hurryChannel) {
+    if (&channel == &m_breathChannel || &channel == &m_hurryChannel || &channel == &m_hddChannel) {
         allowShare = true;
     }
 
-    // 检查串口是否已被占用（且不允许共享）
     if (m_serialPorts.contains(portName) && m_portRefCount.contains(portName) && m_portRefCount[portName] > 0) {
         if (!allowShare) {
-            // 心跳和血压：不允许共享
             QMessageBox::warning(this, "错误",
                                  QString("串口 %1 已被其他功能占用！").arg(portName));
             return false;
         } else {
-            // 呼吸和紧急：允许共享，但需要检查是否有"非共享"功能在使用
-            // 检查心跳是否在使用该串口
             if (m_heartChannel.isConnected && m_heartChannel.selectedPort == portName) {
                 QMessageBox::warning(this, "错误",
-                                     QString("串口 %1 已被心跳功能占用，呼吸/紧急不能共享！").arg(portName));
+                                     QString("串口 %1 已被心跳功能占用，呼吸/紧急/血透不能共享！").arg(portName));
                 return false;
             }
-            // 检查血压是否在使用该串口
             if (m_pressureChannel.isConnected && m_pressureChannel.selectedPort == portName) {
                 QMessageBox::warning(this, "错误",
-                                     QString("串口 %1 已被血压功能占用，呼吸/紧急不能共享！").arg(portName));
+                                     QString("串口 %1 已被血压功能占用，呼吸/紧急/血透不能共享！").arg(portName));
                 return false;
             }
-            // 呼吸和紧急之间可以共享
         }
     }
 
     QSerialPort* serial = nullptr;
 
     if (!m_serialPorts.contains(portName)) {
-        // 创建新的串口对象
         serial = new QSerialPort(portName, this);
         serial->setBaudRate(QSerialPort::Baud115200);
         serial->setDataBits(QSerialPort::Data8);
@@ -198,12 +196,21 @@ bool Serial_Dialog::openSerialPortForChannel(const QString& portName, FunctionCh
             if (s) {
                 QByteArray data = s->readAll();
                 qDebug() << "Received from" << portName << ":" << data;
+
+                QString strData = QString::fromLocal8Bit(data);
+                if (strData.startsWith("HDD:")) {
+                    QString command = strData.mid(4);
+                    if (m_hddChannel.isConnected && m_hddChannel.selectedPort == portName) {
+                        m_hddChannel.currentCommand = command;
+                        setChannelTransmitting(m_hddChannel, true);
+                        startChannelTimer(m_hddChannel);
+                    }
+                }
             }
         });
 
         qDebug() << "串口" << portName << "已打开";
     } else {
-        // 串口已存在，增加引用计数
         m_portRefCount[portName] = m_portRefCount[portName] + 1;
         serial = m_serialPorts[portName];
         qDebug() << "串口" << portName << "引用计数:" << m_portRefCount[portName];
@@ -320,6 +327,8 @@ void Serial_Dialog::startChannelTimer(FunctionChannel& channel)
         interval = 1000;
     } else if (&channel == &m_hurryChannel) {
         interval = 500;
+    } else if (&channel == &m_hddChannel) {
+        interval = 100;
     }
 
     if (interval > 0) {
@@ -356,6 +365,11 @@ void Serial_Dialog::timerEvent(QTimerEvent* event)
 
     if (m_hurryChannel.isTransmitting && event->timerId() == m_hurryChannel.timerId) {
         sendHurryData(m_hurryChannel);
+        return;
+    }
+
+    if (m_hddChannel.isTransmitting && event->timerId() == m_hddChannel.timerId) {
+        sendHddData(m_hddChannel);
         return;
     }
 }
@@ -449,6 +463,30 @@ void Serial_Dialog::sendHurryData(FunctionChannel& channel)
     stopChannelTimer(channel);
     QMessageBox::information(this, "提示",
                              QString("紧急信号已发送到串口 %1").arg(channel.selectedPort));
+}
+
+void Serial_Dialog::sendHddData(FunctionChannel& channel)
+{
+    QSerialPort* serial = getSerialPort(channel.selectedPort);
+    if (!serial || !serial->isOpen()) {
+        setChannelTransmitting(channel, false);
+        stopChannelTimer(channel);
+        return;
+    }
+
+    static int progress = 0;
+    progress += 5;
+    QString msg = QString("HDD:%1:%2").arg(channel.currentCommand).arg(progress);
+    serial->write(msg.toUtf8());
+    qDebug() << "HDD data sent:" << msg;
+
+    if (progress >= 100) {
+        progress = 0;
+        setChannelTransmitting(channel, false);
+        stopChannelTimer(channel);
+        QMessageBox::information(this, "提示",
+                                 QString("血透%1流程已完成").arg(channel.currentCommand));
+    }
 }
 
 // ==================== 连接按钮槽函数 ====================
@@ -597,7 +635,16 @@ void Serial_Dialog::on_comboBox_hurry_currentIndexChanged(int index)
 
 void Serial_Dialog::on_btn_HDD_clicked()
 {
-    QMessageBox::information(this, "提示", "HDD功能开发中...");
+    if (m_hddChannel.isConnected) {
+        closeSerialPortForChannel(m_hddChannel);
+    } else {
+        QString portName = m_hddChannel.comboBox->currentData().toString();
+        if (portName.isEmpty()) {
+            QMessageBox::warning(this, "错误", "请选择串口");
+            return;
+        }
+        openSerialPortForChannel(portName, m_hddChannel);
+    }
 }
 
 void Serial_Dialog::on_comboBox_connect_HDD_currentIndexChanged(int index)
@@ -607,7 +654,18 @@ void Serial_Dialog::on_comboBox_connect_HDD_currentIndexChanged(int index)
 
 void Serial_Dialog::on_btn_HDD_2_clicked()
 {
-    QMessageBox::information(this, "提示", "HDD功能开发中...");
+    if (!m_hddChannel.isConnected) {
+        return;
+    }
+
+    if (m_hddChannel.isTransmitting) {
+        setChannelTransmitting(m_hddChannel, false);
+        stopChannelTimer(m_hddChannel);
+    } else {
+        m_hddChannel.currentCommand = "check";
+        setChannelTransmitting(m_hddChannel, true);
+        startChannelTimer(m_hddChannel);
+    }
 }
 
 // ==================== 获取定时器类型（预留） ====================
@@ -618,5 +676,6 @@ Serial_Dialog::TimerType Serial_Dialog::getTimerType(FunctionChannel& channel)
     if (&channel == &m_pressureChannel) return TimerPressure;
     if (&channel == &m_breathChannel) return TimerBreath;
     if (&channel == &m_hurryChannel) return TimerHurry;
+    if (&channel == &m_hddChannel) return TimerHDD;
     return TimerHeart;
 }
