@@ -28,6 +28,7 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QHBoxLayout *horizontalLayout;
     QLabel *label_UserName;
+    QSpacerItem *horizontalSpacer_3;
     QLabel *label_UserAge;
     QSpacerItem *horizontalSpacer_2;
     QPushButton *btn_quit;
@@ -57,15 +58,20 @@ public:
         font.setBold(false);
         font.setItalic(false);
         label_UserName->setFont(font);
-        label_UserName->setStyleSheet(QString::fromUtf8("\n"
+        label_UserName->setStyleSheet(QString::fromUtf8("color: rgb(170, 170, 127);\n"
 "font: 14pt \"Microsoft YaHei UI\";"));
 
         horizontalLayout->addWidget(label_UserName);
 
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer_3);
+
         label_UserAge = new QLabel(ECGTest_Dialog);
         label_UserAge->setObjectName("label_UserAge");
         label_UserAge->setFont(font);
-        label_UserAge->setStyleSheet(QString::fromUtf8("font: 14pt \"Microsoft YaHei UI\";"));
+        label_UserAge->setStyleSheet(QString::fromUtf8("font: 14pt \"Microsoft YaHei UI\";\n"
+"color: rgb(170, 170, 127);"));
 
         horizontalLayout->addWidget(label_UserAge);
 

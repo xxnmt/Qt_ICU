@@ -97,14 +97,19 @@ public:
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setObjectName("horizontalLayout_4");
         horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setSpacing(20);
         horizontalLayout_3->setObjectName("horizontalLayout_3");
         lab_name = new QLabel(Ventilator_Dialog);
         lab_name->setObjectName("lab_name");
+        lab_name->setStyleSheet(QString::fromUtf8("color: rgb(170, 170, 127);\n"
+"font: 14pt \"Microsoft YaHei UI\";"));
 
         horizontalLayout_3->addWidget(lab_name);
 
         lab_age = new QLabel(Ventilator_Dialog);
         lab_age->setObjectName("lab_age");
+        lab_age->setStyleSheet(QString::fromUtf8("color: rgb(170, 170, 127);\n"
+"font: 14pt \"Microsoft YaHei UI\";"));
 
         horizontalLayout_3->addWidget(lab_age);
 

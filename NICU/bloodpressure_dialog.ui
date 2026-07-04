@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="lab_name">
        <property name="styleSheet">
-        <string notr="true">
+        <string notr="true">color: rgb(170, 170, 127);
 font: 14pt &quot;Microsoft YaHei UI&quot;;</string>
        </property>
        <property name="text">
@@ -30,7 +30,7 @@ font: 14pt &quot;Microsoft YaHei UI&quot;;</string>
      <item>
       <widget class="QLabel" name="lab_age">
        <property name="styleSheet">
-        <string notr="true">
+        <string notr="true">color: rgb(170, 170, 127);
 font: 14pt &quot;Microsoft YaHei UI&quot;;</string>
        </property>
        <property name="text">

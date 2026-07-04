@@ -72,14 +72,14 @@ public:
         horizontalLayout->setObjectName("horizontalLayout");
         lab_name = new QLabel(BloodPressure_Dialog);
         lab_name->setObjectName("lab_name");
-        lab_name->setStyleSheet(QString::fromUtf8("\n"
+        lab_name->setStyleSheet(QString::fromUtf8("color: rgb(170, 170, 127);\n"
 "font: 14pt \"Microsoft YaHei UI\";"));
 
         horizontalLayout->addWidget(lab_name);
 
         lab_age = new QLabel(BloodPressure_Dialog);
         lab_age->setObjectName("lab_age");
-        lab_age->setStyleSheet(QString::fromUtf8("\n"
+        lab_age->setStyleSheet(QString::fromUtf8("color: rgb(170, 170, 127);\n"
 "font: 14pt \"Microsoft YaHei UI\";"));
 
         horizontalLayout->addWidget(lab_age);

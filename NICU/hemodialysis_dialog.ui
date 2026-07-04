@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>750</width>
-    <height>460</height>
+    <height>509</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -440,9 +440,8 @@
                  </sizepolicy>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">font: 14pt &quot;Microsoft YaHei UI&quot;;
-color: rgb(255, 158, 200);
-</string>
+                 <string notr="true">color: rgb(170, 170, 127);
+font: 14pt &quot;Microsoft YaHei UI&quot;;</string>
                 </property>
                 <property name="text">
                  <string>123</string>
@@ -458,8 +457,8 @@ color: rgb(255, 158, 200);
                  </sizepolicy>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">font: 14pt &quot;Microsoft YaHei UI&quot;;
-color: rgb(248, 166, 255);</string>
+                 <string notr="true">color: rgb(170, 170, 127);
+font: 14pt &quot;Microsoft YaHei UI&quot;;</string>
                 </property>
                 <property name="text">
                  <string>123</string>

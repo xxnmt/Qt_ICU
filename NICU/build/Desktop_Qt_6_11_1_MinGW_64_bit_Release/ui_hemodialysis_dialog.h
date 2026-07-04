@@ -79,7 +79,7 @@ public:
     {
         if (Hemodialysis_Dialog->objectName().isEmpty())
             Hemodialysis_Dialog->setObjectName("Hemodialysis_Dialog");
-        Hemodialysis_Dialog->resize(750, 460);
+        Hemodialysis_Dialog->resize(750, 509);
         QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -293,9 +293,8 @@ public:
         namelabel->setObjectName("namelabel");
         sizePolicy1.setHeightForWidth(namelabel->sizePolicy().hasHeightForWidth());
         namelabel->setSizePolicy(sizePolicy1);
-        namelabel->setStyleSheet(QString::fromUtf8("font: 14pt \"Microsoft YaHei UI\";\n"
-"color: rgb(255, 158, 200);\n"
-""));
+        namelabel->setStyleSheet(QString::fromUtf8("color: rgb(170, 170, 127);\n"
+"font: 14pt \"Microsoft YaHei UI\";"));
 
         horizontalLayout_3->addWidget(namelabel);
 
@@ -303,8 +302,8 @@ public:
         agelabel->setObjectName("agelabel");
         sizePolicy1.setHeightForWidth(agelabel->sizePolicy().hasHeightForWidth());
         agelabel->setSizePolicy(sizePolicy1);
-        agelabel->setStyleSheet(QString::fromUtf8("font: 14pt \"Microsoft YaHei UI\";\n"
-"color: rgb(248, 166, 255);"));
+        agelabel->setStyleSheet(QString::fromUtf8("color: rgb(170, 170, 127);\n"
+"font: 14pt \"Microsoft YaHei UI\";"));
 
         horizontalLayout_3->addWidget(agelabel);
 
