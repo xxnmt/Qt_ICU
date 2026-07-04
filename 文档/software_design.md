@@ -1,5 +1,7 @@
 # NICU 重症监护室设备模拟系统 - 软件设计说明
 
+> **版本**: v1.0.0 | **日期**: 2026-07-04
+
 ## 1. 概述
 
 ### 1.1 设计目标
@@ -90,19 +92,15 @@ Transmission (模拟硬件)
 | 变量名 | 类型 | 描述 |
 |--------|------|------|
 | ui | Ui::Main_Dialog* | UI 对象 |
-| ecgDialog | ECGTest_Dialog* | 心电图对话框 |
-| bpDialog | BloodPressure_Dialog* | 血压仪对话框 |
-| hdDialog | Hemodialysis_Dialog* | 血透仪对话框 |
-| ventDialog | Ventilator_Dialog* | 呼吸机对话框 |
 
 **核心方法**:
 
 | 方法名 | 功能 | 参数 | 返回值 |
 |--------|------|------|--------|
-| on_btn_Heart_clicked() | 打开心电图模块 | 无 | void |
-| on_btn_Pressure_clicked() | 打开血压仪模块 | 无 | void |
-| on_btn_Blood_clicked() | 打开血透仪模块 | 无 | void |
-| on_btn_Breath_clicked() | 打开呼吸机模块 | 无 | void |
+| on_btn_Heart_clicked() | 打开心电图模块（创建局部 ECGTest_Dialog 对象） | 无 | void |
+| on_btn_Pressure_clicked() | 打开血压仪模块（创建局部 BloodPressure_Dialog 对象） | 无 | void |
+| on_btn_Blood_clicked() | 打开血透仪模块（创建局部 Hemodialysis_Dialog 对象） | 无 | void |
+| on_btn_Breath_clicked() | 打开呼吸机模块（创建局部 Ventilator_Dialog 对象） | 无 | void |
 | on_btn_Quit_clicked() | 退出程序 | 无 | void |
 
 ### 3.2 心电图模块 (ECGTest_Dialog)
@@ -117,11 +115,11 @@ Transmission (模拟硬件)
 **核心数据结构**:
 
 ```cpp
-struct ECGData {
-    QList<Heart_Data> User_ChannelData[12];  // 12导联数据
-    QList<int> User_newdata;                  // 实时数据
-    bool User_serialflag;                     // 串口标志
-};
+Heart_Data* User_ChannelData[12];    // 12导联数据对象数组
+QJsonArray User_DataArr;              // JSON格式历史数据
+QList<int> User_newdata;              // 串口接收到的实时数据
+bool User_serialflag;                 // 串口数据标志
+QTimer* m_updateTimer;                // 定时器，控制波形刷新频率(50ms)
 ```
 
 **核心方法**:
@@ -131,8 +129,13 @@ struct ECGData {
 | readECGFile() | 读取历史数据文件 | QString FileName | void |
 | getHistoryData() | 获取历史数据 | 无 | void |
 | drawHisECGWave() | 绘制历史波形 | QPainter&, int, int, double | void |
-| updateECGWave() | 更新实时波形 | QPainter&, int, int, double | void |
-| receiveData() | 串口数据接收 | 无 | void |
+| drawRealTimeWave() | 绘制实时波形 | QPainter&, int, int, double | void |
+| drawECGGrid() | 绘制网格背景 | QPainter&, int, int, double | void |
+| drawInterfaceInfo() | 绘制界面信息（通道数、状态指示） | QPainter& | void |
+| receiveData() | 串口数据接收槽 | 无 | void |
+| parseSerialData() | 解析串口数据 | const QByteArray &data | void |
+| updateWaveform() | 定时刷新波形（触发paintEvent） | 无 | void |
+| serialPortInit() | 初始化串口（COM1） | 无 | bool |
 
 **显示布局**:
 
@@ -205,9 +208,17 @@ struct ECGData {
 |--------|------|------|--------|
 | on_btn_check_clicked() | 启动自检 | 无 | void |
 | on_btn_claen_clicked() | 启动清洗 | 无 | void |
+| on_btn_connectD_clicked() | 连接动脉 | 无 | void |
+| on_btn_connectJ_clicked() | 连接静脉 | 无 | void |
+| on_btn_open_clicked() | 开泵 | 无 | void |
 | on_btn_fill_clicked() | 启动预充 | 无 | void |
 | on_btn_start_clicked() | 开始治疗 | 无 | void |
 | on_btn_emergency_clicked() | 紧急停止 | 无 | void |
+| on_btn_quit_clicked() | 退出按钮 | 无 | void |
+| serialPortInit() | 初始化串口（COM2） | 无 | void |
+| receiveData() | 串口数据接收槽 | 无 | void |
+| updateHemoProgress() | 更新血透进度 | QString command, int progress | void |
+| drawRoundProgress() | 初始化圆形进度条组件 | 无 | void |
 
 ### 3.5 呼吸机模块 (Ventilator_Dialog)
 
@@ -555,7 +566,18 @@ ieRatio = inspTime / (60/respRate - inspTime);     // 计算值
 
 ---
 
-## 11. 相关文档
+## 11. 版本信息
+
+| 项目 | 版本 | 说明 |
+|------|------|------|
+| Qt | 6.11.1 | 主框架版本 |
+| QWT | 6.3.0 | 图表绘制库 |
+| C++ | C++17 | 语言标准 |
+| 构建工具 | qmake | Qt 项目构建工具 |
+
+---
+
+## 12. 相关文档
 
 | 文档名称 | 描述 |
 |----------|------|

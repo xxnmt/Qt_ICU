@@ -1,5 +1,7 @@
 # NICU 重症监护室设备模拟系统 - 项目文档
 
+> **版本**: v1.0.0 | **日期**: 2026-07-04
+
 ## 一、项目概述
 
 本项目是一个基于 Qt 6 的重症监护室（NICU）设备模拟系统，包含心电图仪、血压仪、血液透析仪和呼吸机四个主要医疗设备模块，以及一个配套的数据传输客户端用于模拟串口数据发送。
@@ -9,7 +11,7 @@
 - **框架**: Qt 6.11.1 (C++17)
 - **UI框架**: Qt Widgets
 - **串口通信**: Qt Serial Port
-- **图表绘制**: QWT 库
+- **图表绘制**: QWT 6.3.0
 - **构建工具**: qmake + MinGW 64-bit
 
 ---
@@ -17,7 +19,7 @@
 ## 二、项目结构
 
 ```
-Ot_MainWin_system/
+Qt_ICU/
 ├── NICU/                          # 主应用程序（重症监护室设备模拟器）
 │   ├── main.cpp                   # 程序入口
 │   ├── NICU.pro                   # Qt 项目配置文件
@@ -92,7 +94,7 @@ _Dialog│      │ │_Dialog      │ │_Dialog      │ │_Dialog      │
 
 | 设备 | 串口 | 波特率 | 数据格式 |
 |------|------|--------|----------|
-| 心电图 | COM4 | 115200 | 12个整数，逗号分隔 |
+| 心电图 | COM1 | 115200 | 12个整数，逗号分隔 |
 | 血压仪 | COM3 | 115200 | 3字节（高压/低压/脉搏） |
 | 呼吸机 | COM4 | 115200 | `VENT_SET:`（设定参数）、`VENT_STOP`（停止）、`VENT_DATA:`（实时数据）或 'e'（紧急） |
 | 血透仪 | COM2 | 115200 | `HDD:<command>`（命令）、`HDD:<command>:<progress>`（进度） |
@@ -140,15 +142,20 @@ void on_btn_Quit_clicked();        // 退出程序
 - `User_ChannelData[12]` - 12个导联的数据对象数组
 - `User_newdata` - 串口接收到的实时数据
 - `User_serialflag` - 串口数据标志
+- `m_updateTimer` - 定时器，控制波形刷新频率(50ms)
 
 **核心方法**:
 ```cpp
-void readECGFile(QString FileName);     // 读取历史数据文件
-void getHistoryData();                  // 获取历史数据
+void readECGFile(QString FileName);       // 读取历史数据文件
+void getHistoryData();                    // 获取历史数据
 void drawHisECGWave(QPainter&,int,int,double); // 绘制历史波形
-void updateECGWave(QPainter&,int,int,double); // 更新实时波形
-void drawECGGrid(QPainter&,int,int,double);   // 绘制网格
-void receiveData();                     // 串口数据接收槽
+void drawRealTimeWave(QPainter&,int,int,double); // 绘制实时波形
+void drawECGGrid(QPainter&,int,int,double);     // 绘制网格
+void drawInterfaceInfo(QPainter&);        // 绘制界面信息（通道数、状态指示）
+void receiveData();                       // 串口数据接收槽
+void parseSerialData(const QByteArray &data); // 解析串口数据
+void updateWaveform();                    // 定时刷新波形（触发paintEvent）
+bool serialPortInit();                    // 初始化串口
 ```
 
 **显示布局**:
@@ -157,7 +164,7 @@ void receiveData();                     // 串口数据接收槽
 - 网格线间距为 5 像素，粗线间隔为 25 像素
 
 **串口通信**:
-- 端口: COM4
+- 端口: COM1
 - 数据格式: `16,12,9,8,6,34,20,22,20,16,12,9`（12个通道数据，逗号分隔）
 
 ---
@@ -243,7 +250,12 @@ void on_btn_open_clicked();       // 开泵
 void on_btn_fill_clicked();       // 预充（圆形进度条）
 void on_btn_start_clicked();      // 开始治疗（圆形进度条）
 void on_btn_emergency_clicked();  // 紧急停止（红色背景）
+void on_btn_quit_clicked();       // 退出按钮
 void updateProgress();            // 更新自检进度
+void serialPortInit();            // 初始化串口（COM2）
+void receiveData();               // 串口数据接收槽
+void updateHemoProgress(QString command, int progress); // 更新血透进度
+void drawRoundProgress();         // 初始化圆形进度条组件
 ```
 
 ---
@@ -700,7 +712,7 @@ void sendHddData(...);               // 发送血透进度数据
 ### 9.1 编译环境
 
 - Qt 6.11.1 (MinGW 64-bit)
-- QWT 库（需安装并配置 INCLUDEPATH 和 LIBS）
+- QWT 6.3.0（需安装并配置 INCLUDEPATH 和 LIBS）
 
 ### 9.2 编译步骤
 
@@ -723,13 +735,45 @@ void sendHddData(...);               // 发送血透进度数据
 | 项目 | 版本 | 说明 |
 |------|------|------|
 | Qt | 6.11.1 | 主框架版本 |
-| QWT | - | 图表绘制库 |
+| QWT | 6.3.0 | 图表绘制库 |
 | C++ | C++17 | 语言标准 |
 | 构建工具 | qmake | Qt 项目构建工具 |
 
 ---
 
-## 十一、相关文档
+## 十一、资源文件说明
+
+### 11.1 资源路径
+
+NICU 项目使用以下资源前缀：
+
+| 前缀 | 路径 | 用途 |
+|------|------|------|
+| `:/hisdata` | resource_inside/hisdata.txt | 心电图历史数据 |
+| `:/resource_inside/images/` | resource_inside/images/ | 内部图片资源（如呼吸动画、锁定图标） |
+
+### 11.2 图片资源
+
+| 图片 | 用途 |
+|------|------|
+| back.png | 返回按钮 |
+| blood.png | 血液相关图标 |
+| breath.png | 呼吸相关图标 |
+| breathgif.gif | 呼吸动画 |
+| heart.png | 心脏图标 |
+| pressure.png | 血压图标 |
+| progress_back.png | 进度条背景 |
+| progress_front.png | 进度条前景 |
+| lock/unlock.png | 锁定按钮图标 |
+| quit.png | 退出按钮图标 |
+
+### 11.3 数据资源
+
+- `hisdata.txt` - 心电图历史数据（JSON 格式）
+
+---
+
+## 十二、相关文档
 
 | 文档名称 | 描述 |
 |----------|------|
