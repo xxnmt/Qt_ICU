@@ -726,3 +726,15 @@ void sendHddData(...);               // 发送血透进度数据
 | QWT | - | 图表绘制库 |
 | C++ | C++17 | 语言标准 |
 | 构建工具 | qmake | Qt 项目构建工具 |
+
+---
+
+## 十一、相关文档
+
+| 文档名称 | 描述 |
+|----------|------|
+| [README.md](../README.md) | 项目简介和快速开始指南 |
+| [开发计划](development_plan.md) | 项目开发计划、进度安排、资源需求 |
+| [需求规格说明](requirements_specification.md) | 完整需求规格说明文档 |
+| [软件设计说明](software_design.md) | 系统架构设计、模块设计、算法设计 |
+| [软件测试报告](test_report.md) | 测试用例、缺陷记录、测试结论 |
