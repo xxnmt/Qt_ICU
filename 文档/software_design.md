@@ -120,6 +120,7 @@ QJsonArray User_DataArr;              // JSON格式历史数据
 QList<int> User_newdata;              // 串口接收到的实时数据
 bool User_serialflag;                 // 串口数据标志
 QTimer* m_updateTimer;                // 定时器，控制波形刷新频率(50ms)
+QPoint m_offset;                      // 鼠标拖动偏移量
 ```
 
 **核心方法**:
@@ -128,20 +129,31 @@ QTimer* m_updateTimer;                // 定时器，控制波形刷新频率(50
 |--------|------|------|--------|
 | readECGFile() | 读取历史数据文件 | QString FileName | void |
 | getHistoryData() | 获取历史数据 | 无 | void |
-| drawHisECGWave() | 绘制历史波形 | QPainter&, int, int, double | void |
-| drawRealTimeWave() | 绘制实时波形 | QPainter&, int, int, double | void |
+| drawHisECGWave() | 绘制历史波形 | QPainter&, int, int, double, int | void |
+| drawRealTimeWave() | 绘制实时波形 | QPainter&, int, int, double, int | void |
 | drawECGGrid() | 绘制网格背景 | QPainter&, int, int, double | void |
-| drawInterfaceInfo() | 绘制界面信息（通道数、状态指示） | QPainter& | void |
+| drawInterfaceInfo() | 绘制界面信息（通道数、状态指示、数据点数） | QPainter& | void |
 | receiveData() | 串口数据接收槽 | 无 | void |
 | parseSerialData() | 解析串口数据 | const QByteArray &data | void |
 | updateWaveform() | 定时刷新波形（触发paintEvent） | 无 | void |
 | serialPortInit() | 初始化串口（COM1） | 无 | bool |
+| mousePressEvent() | 鼠标按下事件（拖动窗口） | QMouseEvent* | void |
+| mouseMoveEvent() | 鼠标移动事件（拖动窗口） | QMouseEvent* | void |
+| mouseReleaseEvent() | 鼠标释放事件 | QMouseEvent* | void |
+| on_btn_quit_clicked() | 退出按钮 | 无 | void |
+
+**界面特性**:
+
+- **无边框窗口**: 使用 `Qt::FramelessWindowHint`
+- **鼠标拖动**: 支持窗口拖动
+- **用户信息显示**: 姓名和年龄
 
 **显示布局**:
 
 - 2列 × 6行 = 12个导联显示区域
 - 每个导联显示波形曲线和通道名称
 - 网格线间距为 5 像素，粗线间隔为 25 像素
+- 波形区域从 y=60 开始绘制
 
 ### 3.3 血压仪模块 (BloodPressure_Dialog)
 
@@ -158,18 +170,29 @@ QTimer* m_updateTimer;                // 定时器，控制波形刷新频率(50
 | 组件 | 类型 | 功能 |
 |------|------|------|
 | m_bloodPressure | BloodPressure* | 血压处理对象 |
-| lcd_high | QLCDNumber* | 高压显示 |
-| lcd_low | QLCDNumber* | 低压显示 |
-| lcd_pulse | QLCDNumber* | 脉搏显示 |
+| m_offset | QPoint | 鼠标拖动偏移量 |
+| num_HBP | QLCDNumber* | 高压显示 |
+| num_LBP | QLCDNumber* | 低压显示 |
+| num_PULSE | QLCDNumber* | 脉搏显示 |
 
 **核心方法**:
 
 | 方法名 | 功能 | 参数 | 返回值 |
 |--------|------|------|--------|
-| initBP() | 初始化血压数据 | 无 | void |
+| initBP() | 初始化血压数据（生成60个历史数据点） | 无 | void |
 | buildPlot() | 构建绘图组件 | 无 | void |
 | receiveData() | 数据接收槽 | 无 | void |
 | updateCurve() | 更新曲线数据 | QByteArray | void |
+| mousePressEvent() | 鼠标按下事件（拖动窗口） | QMouseEvent* | void |
+| mouseMoveEvent() | 鼠标移动事件（拖动窗口） | QMouseEvent* | void |
+| mouseReleaseEvent() | 鼠标释放事件 | QMouseEvent* | void |
+| on_btn_quit_clicked() | 退出按钮 | 无 | void |
+
+**界面特性**:
+
+- **无边框窗口**: 使用 `Qt::FramelessWindowHint`
+- **鼠标拖动**: 支持窗口拖动
+- **用户信息显示**: 姓名和年龄
 
 **图表功能**:
 
@@ -195,6 +218,15 @@ QTimer* m_updateTimer;                // 定时器，控制波形刷新频率(50
 | m_splash | ProgressBar_Splash* | 进度条动画 |
 | m_fillBar | ProgressBar_Round* | 预充进度条 |
 | m_startBar | ProgressBar_Round* | 治疗进度条 |
+| m_serial | Serial_Tool* | 串口通信 |
+| m_currentCommand | QString | 当前命令 |
+| m_offset | QPoint | 鼠标拖动偏移量 |
+
+**界面特性**:
+
+- **无边框窗口**: 使用 `Qt::FramelessWindowHint`
+- **鼠标拖动**: 支持窗口拖动
+- **用户信息显示**: 姓名和年龄
 
 **流程控制**:
 
@@ -219,6 +251,9 @@ QTimer* m_updateTimer;                // 定时器，控制波形刷新频率(50
 | receiveData() | 串口数据接收槽 | 无 | void |
 | updateHemoProgress() | 更新血透进度 | QString command, int progress | void |
 | drawRoundProgress() | 初始化圆形进度条组件 | 无 | void |
+| mousePressEvent() | 鼠标按下事件（拖动窗口） | QMouseEvent* | void |
+| mouseMoveEvent() | 鼠标移动事件（拖动窗口） | QMouseEvent* | void |
+| mouseReleaseEvent() | 鼠标释放事件 | QMouseEvent* | void |
 
 ### 3.5 呼吸机模块 (Ventilator_Dialog)
 
@@ -239,12 +274,31 @@ enum VentilationMode {
 };
 
 enum ParamType {
-    SET_PARAM,      // 设定参数
-    MONITOR_PARAM,  // 监测参数
-    DERIVED_PARAM,  // 派生参数
-    NA_PARAM        // 不适用
+    SET_PARAM,      // 设定参数（可编辑）
+    MONITOR_PARAM,  // 监测参数（只读）
+    DERIVED_PARAM,  // 派生参数（计算得出，只读）
+    NA_PARAM        // 不适用（隐藏）
 };
 ```
+
+**核心成员变量**:
+
+| 变量名 | 类型 | 描述 |
+|--------|------|------|
+| m_serial | Serial_Tool* | 串口通信对象 |
+| m_timer | QTimer* | 报警灯定时器 |
+| m_lock | bool | 参数锁定状态 |
+| m_lightState | int | 报警灯状态（0-3） |
+| m_currentMode | VentilationMode | 当前通气模式 |
+| m_offset | QPoint | 鼠标拖动偏移量 |
+
+**界面特性**:
+
+- **无边框窗口**: 使用 `Qt::FramelessWindowHint`
+- **鼠标拖动**: 支持窗口拖动
+- **用户信息显示**: 姓名和年龄
+- **呼吸动画**: 使用 QMovie 显示 GIF 动画
+- **状态指示灯**: 绿/黄/红/橙四种状态，1秒切换间隔
 
 **参数分类表**:
 
@@ -265,11 +319,20 @@ enum ParamType {
 
 | 方法名 | 功能 | 参数 | 返回值 |
 |--------|------|------|--------|
+| showGif() | 显示呼吸动画 | 无 | void |
+| serialportInit() | 初始化串口（COM4） | 无 | bool |
+| alarmLight() | 初始化报警灯（绿色） | 无 | void |
+| updateLight() | 灯状态切换槽 | 无 | void |
 | switchMode() | 切换通气模式 | VentilationMode mode | void |
 | sendSetParams() | 发送设定参数 | 无 | void |
 | receiveData() | 接收实时数据 | 无 | void |
 | getParamType() | 获取参数类型 | VentilationMode, QString | ParamType |
 | updateParamStatus() | 更新参数状态 | QString, ParamType | void |
+| on_btn_lock_clicked() | 锁定/解锁按钮 | 无 | void |
+| on_btn_quit_clicked() | 退出按钮 | 无 | void |
+| mousePressEvent() | 鼠标按下事件（拖动窗口） | QMouseEvent* | void |
+| mouseMoveEvent() | 鼠标移动事件（拖动窗口） | QMouseEvent* | void |
+| mouseReleaseEvent() | 鼠标释放事件 | QMouseEvent* | void |
 
 **锁定机制**:
 
@@ -277,6 +340,15 @@ enum ParamType {
 - 锁定时：设定参数不可编辑，发送参数到 Transmission
 - 解锁时：设定参数可编辑，发送 VENT_STOP 停止数据传输
 - 监测参数和派生参数始终只读
+
+**报警灯状态**:
+
+| 状态 | 颜色 | 含义 |
+|------|------|------|
+| 0 | 绿色 | 正常运行 |
+| 1 | 黄色 | 警告 |
+| 2 | 红色 | 紧急报警 |
+| 3 | 橙色 | 故障 |
 
 ## 4. 数据结构设计
 

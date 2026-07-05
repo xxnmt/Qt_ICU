@@ -143,25 +143,38 @@ void on_btn_Quit_clicked();        // 退出程序
 - `User_newdata` - 串口接收到的实时数据
 - `User_serialflag` - 串口数据标志
 - `m_updateTimer` - 定时器，控制波形刷新频率(50ms)
+- `m_offset` - 鼠标拖动偏移量
 
 **核心方法**:
 ```cpp
 void readECGFile(QString FileName);       // 读取历史数据文件
 void getHistoryData();                    // 获取历史数据
-void drawHisECGWave(QPainter&,int,int,double); // 绘制历史波形
-void drawRealTimeWave(QPainter&,int,int,double); // 绘制实时波形
+void drawHisECGWave(QPainter&,int,int,double,int); // 绘制历史波形（含yOffset）
+void drawRealTimeWave(QPainter&,int,int,double,int); // 绘制实时波形（含yOffset）
 void drawECGGrid(QPainter&,int,int,double);     // 绘制网格
-void drawInterfaceInfo(QPainter&);        // 绘制界面信息（通道数、状态指示）
+void drawInterfaceInfo(QPainter&);        // 绘制界面信息（通道数、状态指示、数据点数）
 void receiveData();                       // 串口数据接收槽
 void parseSerialData(const QByteArray &data); // 解析串口数据
 void updateWaveform();                    // 定时刷新波形（触发paintEvent）
-bool serialPortInit();                    // 初始化串口
+bool serialPortInit();                    // 初始化串口（COM1）
+void mousePressEvent(QMouseEvent*);       // 鼠标按下事件（拖动窗口）
+void mouseMoveEvent(QMouseEvent*);        // 鼠标移动事件（拖动窗口）
+void mouseReleaseEvent(QMouseEvent*);     // 鼠标释放事件
+void on_btn_quit_clicked();               // 退出按钮
 ```
+
+**界面特性**:
+- **无边框窗口**: 使用 `Qt::FramelessWindowHint` 实现无边框效果
+- **鼠标拖动**: 支持通过鼠标左键拖动窗口位置
+- **用户信息显示**: 姓名：xxx，年龄：xxx
+- **状态指示**: 实时数据（绿色）/ 等待数据（红色）
+- **数据点数显示**: 显示当前各导联的数据点数量
 
 **显示布局**:
 - 2列 × 6行 = 12个导联显示区域
 - 每个导联显示波形曲线和通道名称
 - 网格线间距为 5 像素，粗线间隔为 25 像素
+- 波形区域从 y=60 开始绘制，留出顶部信息区域
 
 **串口通信**:
 - 端口: COM1
@@ -177,13 +190,22 @@ bool serialPortInit();                    // 初始化串口
 
 **核心数据结构**:
 - `m_bloodPressure` - 血压数据处理对象
+- `m_offset` - 鼠标拖动偏移量
 - 三个 `QLCDNumber` 显示高压、低压、脉搏
 
 **核心方法**:
 ```cpp
-void initBP();                // 初始化血压数据
+void initBP();                // 初始化血压数据（生成60个历史数据点）
 void on_btn_quit_clicked();   // 退出并关闭串口
+void mousePressEvent(QMouseEvent*);       // 鼠标按下事件（拖动窗口）
+void mouseMoveEvent(QMouseEvent*);        // 鼠标移动事件（拖动窗口）
+void mouseReleaseEvent(QMouseEvent*);     // 鼠标释放事件
 ```
+
+**界面特性**:
+- **无边框窗口**: 使用 `Qt::FramelessWindowHint` 实现无边框效果
+- **鼠标拖动**: 支持通过鼠标左键拖动窗口位置
+- **用户信息显示**: 姓名：xxx，年龄：xxx
 
 **血压处理类 (BloodPressure)**:
 **文件**: `bloodpressure.cpp/h`
@@ -203,7 +225,7 @@ void on_btn_quit_clicked();   // 退出并关闭串口
 void buildPlot();                     // 构建绘图组件
 void drawHistoryData(...);            // 绘制历史数据
 void addCurve();                      // 添加曲线
-void serialPortInit();                // 初始化串口
+void serialPortInit();                // 初始化串口（COM3）
 void receiveData();                   // 数据接收槽
 void updateCurve(QByteArray);         // 更新曲线数据
 ```
@@ -223,7 +245,13 @@ void updateCurve(QByteArray);         // 更新曲线数据
 **核心组件**:
 - `ProgressBar_Splash` - 进度条动画（用于各步骤进度）
 - `ProgressBar_Round` - 圆形进度条（用于填充和开始按钮）
-- `QTimer` - 定时器控制进度
+- `Serial_Tool` - 串口通信
+- `m_offset` - 鼠标拖动偏移量
+
+**界面特性**:
+- **无边框窗口**: 使用 `Qt::FramelessWindowHint` 实现无边框效果
+- **鼠标拖动**: 支持通过鼠标左键拖动窗口位置
+- **用户信息显示**: 姓名：xxx，年龄：xxx
 
 **UI 控件**:
 - `btn_check` - 自检按钮
@@ -234,6 +262,9 @@ void updateCurve(QByteArray);         // 更新曲线数据
 - `btn_fill` - 预充按钮
 - `btn_start` - 开始治疗按钮
 - `btn_emergency` - 紧急停止按钮
+- `btn_quit` - 退出按钮
+- 5个直线进度条（自检、清洗、连接动脉、连接静脉、开泵）
+- 2个圆形进度条（预充、治疗）
 
 **流程控制**:
 ```
@@ -256,7 +287,15 @@ void serialPortInit();            // 初始化串口（COM2）
 void receiveData();               // 串口数据接收槽
 void updateHemoProgress(QString command, int progress); // 更新血透进度
 void drawRoundProgress();         // 初始化圆形进度条组件
+void mousePressEvent(QMouseEvent*);       // 鼠标按下事件（拖动窗口）
+void mouseMoveEvent(QMouseEvent*);        // 鼠标移动事件（拖动窗口）
+void mouseReleaseEvent(QMouseEvent*);     // 鼠标释放事件
 ```
+
+**串口通信**:
+- 端口: COM2
+- 发送格式: `HDD:<command>`（check/clean/connectD/connectJ/open/fill/start/emergency）
+- 接收格式: `HDD:<command>:<progress>`（进度0-100）
 
 ---
 
@@ -270,6 +309,15 @@ void drawRoundProgress();         // 初始化圆形进度条组件
 - `Alarm_Light` - 报警灯组件（绿/黄/红/橙四种状态）
 - `QMovie` - GIF 动画显示呼吸波形
 - `Serial_Tool` - 串口通信
+- `m_offset` - 鼠标拖动偏移量
+
+**界面特性**:
+- **无边框窗口**: 使用 `Qt::FramelessWindowHint` 实现无边框效果
+- **鼠标拖动**: 支持通过鼠标左键拖动窗口位置
+- **用户信息显示**: 姓名：xxx，年龄：xxx
+- **呼吸动画**: 使用 GIF 动画显示呼吸波形
+- **状态指示灯**: 绿/黄/红/橙四种状态指示
+- **参数锁定**: 锁定状态下参数不可修改，解锁后可修改并停止通气
 
 **UI 控件**:
 | 控件名称 | 类型 | 功能 |
@@ -288,6 +336,7 @@ void drawRoundProgress();         // 初始化圆形进度条组件
 | `lab_Gif` | QLabel | 呼吸动画显示 |
 | `widget_light` | Alarm_Light | 状态指示灯 |
 | `btn_lock` | QPushButton | 锁定/解锁按钮 |
+| `btn_quit` | QPushButton | 退出按钮 |
 
 **核心枚举**:
 ```cpp
@@ -298,25 +347,49 @@ enum VentilationMode {
 };
 
 enum ParamType {
-    SET_PARAM,      // 设定参数
-    MONITOR_PARAM,  // 监测参数
-    DERIVED_PARAM,  // 派生参数
-    NA_PARAM        // 不适用
+    SET_PARAM,      // 设定参数（可编辑）
+    MONITOR_PARAM,  // 监测参数（只读）
+    DERIVED_PARAM,  // 派生参数（计算得出，只读）
+    NA_PARAM        // 不适用（隐藏）
 };
 ```
 
 **核心方法**:
 ```cpp
-void showGif();                          // 显示呼吸动画
-void serialportInit();                   // 初始化串口
-void alarmLight();                       // 初始化报警灯
-void updateLight();                      // 灯状态切换槽
+void showGif();                          // 显示呼吸动画（加载 breathgif.gif）
+void serialportInit();                   // 初始化串口（COM4）
+void alarmLight();                       // 初始化报警灯（绿色）
+void updateLight();                      // 灯状态切换槽（1秒间隔）
 void receiveData();                      // 串口数据接收槽
-void switchMode(VentilationMode mode);   // 切换通气模式
+void switchMode(VentilationMode mode);   // 切换通气模式，更新参数状态
 void updateParamStatus(...);             // 更新参数可编辑状态
-void sendSetParams();                    // 发送设定参数
-ParamType getParamType(...);             // 获取参数类型
+void sendSetParams();                    // 发送设定参数到串口
+ParamType getParamType(...);             // 获取参数类型（设定/监测/派生/不适用）
+void on_btn_lock_clicked();              // 锁定/解锁按钮
+void on_btn_quit_clicked();              // 退出按钮
+void mousePressEvent(QMouseEvent*);       // 鼠标按下事件（拖动窗口）
+void mouseMoveEvent(QMouseEvent*);        // 鼠标移动事件（拖动窗口）
+void mouseReleaseEvent(QMouseEvent*);     // 鼠标释放事件
 ```
+
+**通气模式参数配置**:
+
+| 参数 | VCV模式 | PCV模式 | PSV模式 |
+|------|---------|---------|---------|
+| 潮气量 | 设定 | 监测 | 监测 |
+| 呼吸频率 | 设定 | 设定 | 监测 |
+| 吸气时间 | 设定 | 设定 | 派生 |
+| 吸气压力 | 监测 | 设定 | 设定 |
+| 升压时间 | 不适用 | 设定 | 设定 |
+| 呼气压力 | 设定 | 设定 | 设定 |
+| 每分钟通气量 | 派生 | 派生 | 派生 |
+| 呼吸比例 | 派生 | 派生 | 派生 |
+
+**串口通信**:
+- 端口: COM4
+- 发送格式: `VENT_SET:<mode>:<param1>:<param2>:...`
+- 接收格式: `VENT_DATA:<param1>:<param2>:...`（实时数据）
+- 紧急停止: `VENT_STOP` 或 `e`
 
 **参数分类表**:
 | 参数 | 容量控制(VCV) | 压力控制(PCV) | 压力支持(PSV) |

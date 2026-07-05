@@ -11,6 +11,8 @@ Ventilator_Dialog::Ventilator_Dialog(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle(QString::fromUtf8("呼吸机"));
+    this->setWindowFlags(Qt::FramelessWindowHint);
+
     QString showText0 = QString("姓名：%1").arg(user.getName());
     ui->lab_name->setText(showText0);
     QString showText1 = QString("年龄：%1").arg(user.getAge());
