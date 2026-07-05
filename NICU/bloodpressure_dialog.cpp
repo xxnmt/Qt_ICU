@@ -9,10 +9,12 @@ BloodPressure_Dialog::BloodPressure_Dialog(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowTitle(QString::fromUtf8("血压仪"));
-    //this->setWindowFlags(Qt::FramelessWindowHint);
+    this->setWindowFlags(Qt::FramelessWindowHint);
 
-    ui->lab_name->setText(user.getName());
-    ui->lab_age->setText(QString::number(user.getAge()));
+    QString showText0 = QString("姓名：%1").arg(user.getName());
+    ui->lab_name->setText(showText0);
+    QString showText1 = QString("年龄：%1").arg(user.getAge());
+    ui->lab_age->setText(showText1);
 
     m_bloodPressure  = new BloodPressure(ui->Plot_Blood,ui->num_HBP,ui->num_LBP,ui->num_PULSE);
 
@@ -28,6 +30,30 @@ BloodPressure_Dialog::~BloodPressure_Dialog()
     delete ui;
 }
 
+// 鼠标移动拖动窗口
+void BloodPressure_Dialog::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        QPoint globalPt = event->globalPosition().toPoint();
+        m_offset = globalPt - this->frameGeometry().topLeft();
+    }
+    QDialog::mousePressEvent(event);
+}
+
+void BloodPressure_Dialog::mouseMoveEvent(QMouseEvent *event)
+{
+    if(event->buttons() & Qt::LeftButton)
+    {
+        QPoint globalPt = event->globalPosition().toPoint();
+        this->move(globalPt - m_offset);
+    }
+    QDialog::mouseMoveEvent(event);
+}
+void BloodPressure_Dialog::mouseReleaseEvent(QMouseEvent *event)
+{
+    QDialog::mouseReleaseEvent(event);
+}
 void BloodPressure_Dialog::initBP()
 {
     int length = 60;

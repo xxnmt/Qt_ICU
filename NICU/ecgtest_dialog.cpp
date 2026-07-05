@@ -25,9 +25,9 @@ ECGTest_Dialog::ECGTest_Dialog(QWidget *parent)
     // 1. 设置窗口属性
     setWindowTitle(QString::fromUtf8("心电图"));
     // 暂时去掉无边框以便调试
-    // setWindowFlags(Qt::FramelessWindowHint);
-    resize(660, 450);
-
+    setWindowFlags(Qt::FramelessWindowHint);
+    resize(660, 550);
+    this->resize(660, 550);
     // 2. 设置白色背景
     QPalette pal = this->palette();
     pal.setColor(QPalette::Window, Qt::white);
@@ -35,8 +35,10 @@ ECGTest_Dialog::ECGTest_Dialog(QWidget *parent)
     this->setAutoFillBackground(true);
 
     // 3. 初始化用户信息
-    ui->label_UserAge->setText(QString::number(user.getAge()));
-    ui->label_UserName->setText(user.getName());
+    QString showText0 = QString("姓名：%1").arg(user.getName());
+    ui->label_UserAge->setText(showText0);
+    QString showText1 = QString("年龄：%1").arg(user.getAge());
+    ui->label_UserName->setText(showText1);
 
     // 4. 读取历史数据
     for (int i = 0; i < 12; i++) {
@@ -67,6 +69,31 @@ ECGTest_Dialog::~ECGTest_Dialog()
     }
 
     delete ui;
+}
+
+// 鼠标移动拖动窗口
+void ECGTest_Dialog::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        QPoint globalPt = event->globalPosition().toPoint();
+        m_offset = globalPt - this->frameGeometry().topLeft();
+    }
+    QDialog::mousePressEvent(event);
+}
+
+void ECGTest_Dialog::mouseMoveEvent(QMouseEvent *event)
+{
+    if(event->buttons() & Qt::LeftButton)
+    {
+        QPoint globalPt = event->globalPosition().toPoint();
+        this->move(globalPt - m_offset);
+    }
+    QDialog::mouseMoveEvent(event);
+}
+void ECGTest_Dialog::mouseReleaseEvent(QMouseEvent *event)
+{
+    QDialog::mouseReleaseEvent(event);
 }
 
 void ECGTest_Dialog::readECGFile(QString FileName)
@@ -111,6 +138,7 @@ void ECGTest_Dialog::getHistoryData()
 // ============================================================
 void ECGTest_Dialog::paintEvent(QPaintEvent *event)
 {
+
     int w = this->width();
     int h = this->height();
 
@@ -124,8 +152,10 @@ void ECGTest_Dialog::paintEvent(QPaintEvent *event)
     painter.fillRect(0, 0, w, h, Qt::white);
 
     // 2. 绘制网格
+
     int topMargin = 0;
     int waveformHeight = h - topMargin;
+    int y= 60;
 
     // 保存画家状态，设置裁剪区域防止绘制到控件区域
     painter.save();
@@ -134,10 +164,11 @@ void ECGTest_Dialog::paintEvent(QPaintEvent *event)
 
     // 绘制网格和波形（坐标相对于波形区域）
     drawECGGrid(painter, w, waveformHeight, DOTS);
-    drawHisECGWave(painter, w, waveformHeight, DOTS);
+
+    drawHisECGWave(painter, w, h-y, DOTS, y);
 
     if (User_serialflag && !User_newdata.isEmpty()) {
-        drawRealTimeWave(painter, w, waveformHeight, DOTS);  // 高亮点会显示！
+        drawRealTimeWave(painter, w, h-y, DOTS,y);  // 高亮点会显示！
     }
 
     painter.restore();
@@ -148,14 +179,14 @@ void ECGTest_Dialog::paintEvent(QPaintEvent *event)
     QFont f("微软雅黑", 9);
     f.setBold(true);
     painter.setFont(f);
-    painter.drawText(10, topMargin + 20, "Channel: 12  Speed: 25mm/s");
+    painter.drawText(10, topMargin+15, "Channel: 12  Speed: 25mm/s");
 
     if (User_serialflag) {
         painter.setPen(QColor(0, 200, 0));
-        painter.drawText(10, topMargin + 40, "● 实时数据");
+        painter.drawText(10, topMargin + 35, "● 实时数据");
     } else {
         painter.setPen(QColor(200, 0, 0));
-        painter.drawText(10, topMargin + 40, "○ 等待数据...");
+        painter.drawText(10, topMargin + 35, "○ 等待数据...");
     }
 
     // 显示数据点数
@@ -164,7 +195,7 @@ void ECGTest_Dialog::paintEvent(QPaintEvent *event)
         QFont smallFont("微软雅黑", 8);
         painter.setFont(smallFont);
         int dataSize = User_ChannelData[0]->getDataArr().size();
-        painter.drawText(10, topMargin + 58, QString("数据点数: %1").arg(dataSize));
+        painter.drawText(10, topMargin + 50, QString("数据点数: %1").arg(dataSize));
     }
 
     painter.restore();
@@ -180,16 +211,16 @@ void ECGTest_Dialog::drawECGGrid(QPainter &painter, int width, int height, doubl
 
     // 小网格（浅蓝色）
     painter.setPen(QColor(230, 240, 250));
-    for (int i = 0; i <= width / DOTS; i++) {
-        painter.drawLine(0, i * DOTS, width, i * DOTS);
-        painter.drawLine(i * DOTS, 0, i * DOTS, height);
+    for (int i = 0; i <= width /dots; i++) {
+        painter.drawLine(0, i * dots, width, i * dots);
+        painter.drawLine(i * dots, 0, i * dots, height);
     }
 
     // 大网格（蓝色）
     painter.setPen(QColor(190, 215, 240));
-    for (int i = 0; i <= width / DOTS / 5; i++) {
-        painter.drawLine(0, i * DOTS * 5, width, i * DOTS * 5);
-        painter.drawLine(i * DOTS * 5, 0, i * DOTS * 5, height);
+    for (int i = 0; i <= width / dots / 5; i++) {
+        painter.drawLine(0, i * dots * 5, width, i * dots * 5);
+        painter.drawLine(i * dots * 5, 0, i * dots * 5, height);
     }
 
     painter.restore();
@@ -198,7 +229,7 @@ void ECGTest_Dialog::drawECGGrid(QPainter &painter, int width, int height, doubl
 // ============================================================
 // 绘制历史波形（灰色）
 // ============================================================
-void ECGTest_Dialog::drawHisECGWave(QPainter &painter, int width, int height, double dots)
+void ECGTest_Dialog::drawHisECGWave(QPainter &painter, int width, int height, double dots, int yOffset)
 {
     painter.save();
 
@@ -226,7 +257,6 @@ void ECGTest_Dialog::drawHisECGWave(QPainter &painter, int width, int height, do
                 continue;
             }
 
-            // 只显示最新的数据（滚动显示）
             int maxPoints = rectWidth - dots * 2;
             int startIndex = qMax(0, wavelen - maxPoints);
 
@@ -238,21 +268,23 @@ void ECGTest_Dialog::drawHisECGWave(QPainter &painter, int width, int height, do
                     break;
                 }
 
+                // x 坐标不变
                 int x = col * rectWidth + (i - startIndex);
-                double y = row * rowHeight + middleHeight - data[i].toInt() * fpPerUv;
-                y = qBound(0.0, y, (double)height);
+                // y 坐标需要加上 yOffset
+                double y = row * rowHeight + middleHeight - data[i].toInt() * fpPerUv + yOffset;
+                y = qBound((double)yOffset, y, (double)(height + yOffset));
 
                 vecPoints.append(QPoint(x, (int)y));
             }
 
-            // 绘制通道名称（灰色）
+            // 绘制通道名称 - 也要加上 yOffset
             painter.save();
             painter.setPen(QColor(150, 150, 150));
-            painter.drawText(col * rectWidth + 5, row * rowHeight + 20,
+            painter.drawText(col * rectWidth + 5, row * rowHeight + 20 + yOffset,
                              User_ChannelData[index]->getChannelName());
             painter.restore();
 
-            // 绘制历史波形（浅灰色）
+            // 绘制历史波形
             if (vecPoints.size() > 1) {
                 painter.save();
                 painter.setPen(QColor(200, 200, 200));
@@ -270,7 +302,7 @@ void ECGTest_Dialog::drawHisECGWave(QPainter &painter, int width, int height, do
 // ============================================================
 // 绘制实时波形（绿色）
 // ============================================================
-void ECGTest_Dialog::drawRealTimeWave(QPainter &painter, int width, int height, double dots)
+void ECGTest_Dialog::drawRealTimeWave(QPainter &painter, int width, int height, double dots, int yOffset)
 {
     painter.save();
 
@@ -298,7 +330,6 @@ void ECGTest_Dialog::drawRealTimeWave(QPainter &painter, int width, int height, 
                 continue;
             }
 
-            // 获取最新的数据
             int maxPoints = rectWidth - dots * 2;
             int startPoint = qMax(0, wavelength - maxPoints);
 
@@ -311,20 +342,20 @@ void ECGTest_Dialog::drawRealTimeWave(QPainter &painter, int width, int height, 
                 }
 
                 double x = col * rectWidth + (i - startPoint);
-                double y = row * rowHeight + middleHeight - dataArr[i].toInt() * fpPerUv;
-                y = qBound(0.0, y, (double)height);
+                double y = row * rowHeight + middleHeight - dataArr[i].toInt() * fpPerUv + yOffset;
+                y = qBound((double)yOffset, y, (double)(height + yOffset));
 
                 vecPoints.append(QPointF(x, y));
             }
 
-            // 绘制通道名称（绿色）
+            // 绘制通道名称 - 加上 yOffset
             painter.save();
             painter.setPen(QColor(62, 168, 115));
-            painter.drawText(col * rectWidth + 5, row * rowHeight + 20,
+            painter.drawText(col * rectWidth + 5, row * rowHeight + 20 + yOffset,
                              User_ChannelData[index]->getChannelName());
             painter.restore();
 
-            // 绘制实时波形（亮绿色）
+            // 绘制实时波形
             if (vecPoints.size() > 1) {
                 painter.save();
                 painter.setPen(QColor(62, 168, 115));

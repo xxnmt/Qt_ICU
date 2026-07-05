@@ -11,8 +11,10 @@ Ventilator_Dialog::Ventilator_Dialog(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle(QString::fromUtf8("呼吸机"));
-    ui->lab_name->setText(user.getName());
-    ui->lab_age->setText(QString::number(user.getAge()));
+    QString showText0 = QString("姓名：%1").arg(user.getName());
+    ui->lab_name->setText(showText0);
+    QString showText1 = QString("年龄：%1").arg(user.getAge());
+    ui->lab_age->setText(showText1);
     m_lock = true;
     m_currentMode = VCV;
 
@@ -28,6 +30,31 @@ Ventilator_Dialog::~Ventilator_Dialog()
 {
     m_serial->serialClose();
     delete ui;
+}
+
+// 鼠标移动拖动窗口
+void Ventilator_Dialog::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        QPoint globalPt = event->globalPosition().toPoint();
+        m_offset = globalPt - this->frameGeometry().topLeft();
+    }
+    QDialog::mousePressEvent(event);
+}
+
+void Ventilator_Dialog::mouseMoveEvent(QMouseEvent *event)
+{
+    if(event->buttons() & Qt::LeftButton)
+    {
+        QPoint globalPt = event->globalPosition().toPoint();
+        this->move(globalPt - m_offset);
+    }
+    QDialog::mouseMoveEvent(event);
+}
+void Ventilator_Dialog::mouseReleaseEvent(QMouseEvent *event)
+{
+    QDialog::mouseReleaseEvent(event);
 }
 
 void Ventilator_Dialog::showGif()

@@ -430,7 +430,7 @@ release/moc_alarm_light.cpp: ../../alarm_light.h \
 		D:/QT/6.11.1/mingw_64/include/QtGui/qpen.h \
 		release/moc_predefs.h \
 		D:/QT/6.11.1/mingw_64/bin/moc.exe
-	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Ot_MainWin_system/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Ot_MainWin_system/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\alarm_light.h -o release\moc_alarm_light.cpp
+	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Qt_ICU/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Qt_ICU/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\alarm_light.h -o release\moc_alarm_light.cpp
 
 release/moc_bloodpressure.cpp: ../../bloodpressure.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/QObject \
@@ -684,7 +684,7 @@ release/moc_bloodpressure.cpp: ../../bloodpressure.h \
 		D:/QT/6.11.1/mingw_64/include/QtQwt/qwt_global.h \
 		release/moc_predefs.h \
 		D:/QT/6.11.1/mingw_64/bin/moc.exe
-	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Ot_MainWin_system/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Ot_MainWin_system/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\bloodpressure.h -o release\moc_bloodpressure.cpp
+	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Qt_ICU/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Qt_ICU/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\bloodpressure.h -o release\moc_bloodpressure.cpp
 
 release/moc_bloodpressure_dialog.cpp: ../../bloodpressure_dialog.h \
 		../../bloodpressure.h \
@@ -939,9 +939,10 @@ release/moc_bloodpressure_dialog.cpp: ../../bloodpressure_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtQwt/qwt_global.h \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/QDialog \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/qdialog.h \
+		D:/QT/6.11.1/mingw_64/include/QtGui/QMouseEvent \
 		release/moc_predefs.h \
 		D:/QT/6.11.1/mingw_64/bin/moc.exe
-	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Ot_MainWin_system/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Ot_MainWin_system/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\bloodpressure_dialog.h -o release\moc_bloodpressure_dialog.cpp
+	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Qt_ICU/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Qt_ICU/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\bloodpressure_dialog.h -o release\moc_bloodpressure_dialog.cpp
 
 release/moc_ecgtest_dialog.cpp: ../../ecgtest_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/QDialog \
@@ -1169,9 +1170,10 @@ release/moc_ecgtest_dialog.cpp: ../../ecgtest_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qserialportinfo.h \
 		../../heart_data.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/QString \
+		D:/QT/6.11.1/mingw_64/include/QtGui/QMouseEvent \
 		release/moc_predefs.h \
 		D:/QT/6.11.1/mingw_64/bin/moc.exe
-	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Ot_MainWin_system/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Ot_MainWin_system/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\ecgtest_dialog.h -o release\moc_ecgtest_dialog.cpp
+	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Qt_ICU/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Qt_ICU/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\ecgtest_dialog.h -o release\moc_ecgtest_dialog.cpp
 
 release/moc_hemodialysis_dialog.cpp: ../../hemodialysis_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/QDialog \
@@ -1401,9 +1403,10 @@ release/moc_hemodialysis_dialog.cpp: ../../hemodialysis_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qtserialportexports.h \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/QSerialPortInfo \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qserialportinfo.h \
+		D:/QT/6.11.1/mingw_64/include/QtGui/QMouseEvent \
 		release/moc_predefs.h \
 		D:/QT/6.11.1/mingw_64/bin/moc.exe
-	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Ot_MainWin_system/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Ot_MainWin_system/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\hemodialysis_dialog.h -o release\moc_hemodialysis_dialog.cpp
+	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Qt_ICU/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Qt_ICU/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\hemodialysis_dialog.h -o release\moc_hemodialysis_dialog.cpp
 
 release/moc_main_dialog.cpp: ../../main_dialog.h \
 		../../ecgtest_dialog.h \
@@ -1632,6 +1635,7 @@ release/moc_main_dialog.cpp: ../../main_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qserialportinfo.h \
 		../../heart_data.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/QString \
+		D:/QT/6.11.1/mingw_64/include/QtGui/QMouseEvent \
 		../../hemodialysis_dialog.h \
 		../../progressbar_check.h \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/QWidget \
@@ -1694,7 +1698,7 @@ release/moc_main_dialog.cpp: ../../main_dialog.h \
 		../../user_data.h \
 		release/moc_predefs.h \
 		D:/QT/6.11.1/mingw_64/bin/moc.exe
-	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Ot_MainWin_system/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Ot_MainWin_system/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\main_dialog.h -o release\moc_main_dialog.cpp
+	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Qt_ICU/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Qt_ICU/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\main_dialog.h -o release\moc_main_dialog.cpp
 
 release/moc_progressbar_round.cpp: ../../progressbar_round.h \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/QWidget \
@@ -1903,7 +1907,7 @@ release/moc_progressbar_round.cpp: ../../progressbar_round.h \
 		D:/QT/6.11.1/mingw_64/include/QtGui/qpen.h \
 		release/moc_predefs.h \
 		D:/QT/6.11.1/mingw_64/bin/moc.exe
-	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Ot_MainWin_system/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Ot_MainWin_system/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\progressbar_round.h -o release\moc_progressbar_round.cpp
+	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Qt_ICU/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Qt_ICU/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\progressbar_round.h -o release\moc_progressbar_round.cpp
 
 release/moc_progressbar_splash.cpp: ../../progressbar_splash.h \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/QSplashScreen \
@@ -2116,7 +2120,7 @@ release/moc_progressbar_splash.cpp: ../../progressbar_splash.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/QTimerEvent \
 		release/moc_predefs.h \
 		D:/QT/6.11.1/mingw_64/bin/moc.exe
-	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Ot_MainWin_system/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Ot_MainWin_system/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\progressbar_splash.h -o release\moc_progressbar_splash.cpp
+	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Qt_ICU/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Qt_ICU/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\progressbar_splash.h -o release\moc_progressbar_splash.cpp
 
 release/moc_ventilator_dialog.cpp: ../../ventilator_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/QDialog \
@@ -2331,9 +2335,10 @@ release/moc_ventilator_dialog.cpp: ../../ventilator_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qtserialportexports.h \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/QSerialPortInfo \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qserialportinfo.h \
+		D:/QT/6.11.1/mingw_64/include/QtGui/QMouseEvent \
 		release/moc_predefs.h \
 		D:/QT/6.11.1/mingw_64/bin/moc.exe
-	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Ot_MainWin_system/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Ot_MainWin_system/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\ventilator_dialog.h -o release\moc_ventilator_dialog.cpp
+	D:\QT\6.11.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/QtProject/Qt_ICU/NICU/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release/release/moc_predefs.h -ID:/QT/6.11.1/mingw_64/mkspecs/win32-g++ -ID:/QtProject/Qt_ICU/NICU -ID:/Qt/6.11.1/mingw_64/include/QtQwt -ID:/QT/6.11.1/mingw_64/include -ID:/QT/6.11.1/mingw_64/include/QtWidgets -ID:/QT/6.11.1/mingw_64/include/QtGui -ID:/QT/6.11.1/mingw_64/include/QtSerialPort -ID:/QT/6.11.1/mingw_64/include/QtCore -I. -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++ -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32 -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include -ID:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed -ID:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include ..\..\ventilator_dialog.h -o release\moc_ventilator_dialog.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -3497,6 +3502,7 @@ release/bloodpressure_dialog.o: ../../bloodpressure_dialog.cpp ../../bloodpressu
 		D:/QT/6.11.1/mingw_64/include/QtQwt/qwt_global.h \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/QDialog \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/qdialog.h \
+		D:/QT/6.11.1/mingw_64/include/QtGui/QMouseEvent \
 		ui_bloodpressure_dialog.h \
 		../../user_data.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/QString
@@ -3728,6 +3734,7 @@ release/ecgtest_dialog.o: ../../ecgtest_dialog.cpp ../../ecgtest_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qserialportinfo.h \
 		../../heart_data.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/QString \
+		D:/QT/6.11.1/mingw_64/include/QtGui/QMouseEvent \
 		ui_ecgtest_dialog.h \
 		../../user_data.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/QFile \
@@ -4115,6 +4122,7 @@ release/hemodialysis_dialog.o: ../../hemodialysis_dialog.cpp ../../hemodialysis_
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qtserialportexports.h \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/QSerialPortInfo \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qserialportinfo.h \
+		D:/QT/6.11.1/mingw_64/include/QtGui/QMouseEvent \
 		ui_hemodialysis_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/QDebug \
 		D:/QT/6.11.1/mingw_64/include/QtCore/QTimer \
@@ -4350,6 +4358,7 @@ release/main.o: ../../main.cpp ../../main_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qserialportinfo.h \
 		../../heart_data.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/QString \
+		D:/QT/6.11.1/mingw_64/include/QtGui/QMouseEvent \
 		../../hemodialysis_dialog.h \
 		../../progressbar_check.h \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/QWidget \
@@ -4641,6 +4650,7 @@ release/main_dialog.o: ../../main_dialog.cpp ../../main_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qserialportinfo.h \
 		../../heart_data.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/QString \
+		D:/QT/6.11.1/mingw_64/include/QtGui/QMouseEvent \
 		../../hemodialysis_dialog.h \
 		../../progressbar_check.h \
 		D:/QT/6.11.1/mingw_64/include/QtWidgets/QWidget \
@@ -5887,6 +5897,7 @@ release/ventilator_dialog.o: ../../ventilator_dialog.cpp ../../ventilator_dialog
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qtserialportexports.h \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/QSerialPortInfo \
 		D:/QT/6.11.1/mingw_64/include/QtSerialPort/qserialportinfo.h \
+		D:/QT/6.11.1/mingw_64/include/QtGui/QMouseEvent \
 		ui_ventilator_dialog.h \
 		D:/QT/6.11.1/mingw_64/include/QtCore/QTimer \
 		D:/QT/6.11.1/mingw_64/include/QtCore/qtimer.h \

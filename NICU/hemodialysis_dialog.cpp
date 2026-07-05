@@ -11,8 +11,12 @@ Hemodialysis_Dialog::Hemodialysis_Dialog(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle(QString::fromUtf8("血透仪"));
-    ui->namelabel->setText(user.getName());
-    ui->agelabel->setText(QString::number(user.getAge()));
+    this->setWindowFlags(Qt::FramelessWindowHint);
+
+    QString showText0 = QString("姓名：%1").arg(user.getName());
+    ui->namelabel->setText(showText0);
+    QString showText1 = QString("年龄：%1").arg(user.getAge());
+    ui->agelabel->setText(showText1);
     ui->btn_connectD->setEnabled(0);
     ui->btn_connectJ->setEnabled(0);
     ui->btn_open->setEnabled(0);
@@ -33,6 +37,32 @@ Hemodialysis_Dialog::~Hemodialysis_Dialog()
         delete m_serial;
     }
     delete ui;
+}
+
+
+// 鼠标移动拖动窗口
+void Hemodialysis_Dialog::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        QPoint globalPt = event->globalPosition().toPoint();
+        m_offset = globalPt - this->frameGeometry().topLeft();
+    }
+    QDialog::mousePressEvent(event);
+}
+
+void Hemodialysis_Dialog::mouseMoveEvent(QMouseEvent *event)
+{
+    if(event->buttons() & Qt::LeftButton)
+    {
+        QPoint globalPt = event->globalPosition().toPoint();
+        this->move(globalPt - m_offset);
+    }
+    QDialog::mouseMoveEvent(event);
+}
+void Hemodialysis_Dialog::mouseReleaseEvent(QMouseEvent *event)
+{
+    QDialog::mouseReleaseEvent(event);
 }
 
 void Hemodialysis_Dialog::drawRoundProgress()

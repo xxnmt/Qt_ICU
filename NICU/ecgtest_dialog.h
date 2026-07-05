@@ -7,6 +7,7 @@
 #include <QTimer>
 #include "serial_tool.h"
 #include "heart_data.h"
+#include <QMouseEvent>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ECGTest_Dialog; }
@@ -23,6 +24,12 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) override;
 
+protected:
+    // 重写鼠标事件
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
 private slots:
     void receiveData();
     void on_btn_quit_clicked();
@@ -31,10 +38,10 @@ private slots:
 private:
     void readECGFile(QString FileName);
     void getHistoryData();
-    void drawECGGrid(QPainter &painter, int width, int height, double dots);
-    void drawHisECGWave(QPainter &painter, int width, int height, double dots);
-    void drawRealTimeWave(QPainter &painter, int width, int height, double dots);
     void drawInterfaceInfo(QPainter &painter);
+    void drawECGGrid(QPainter &painter, int width, int height, double dots);
+    void drawHisECGWave(QPainter &painter, int width, int height, double dots,int yOffset);
+    void drawRealTimeWave(QPainter &painter, int width, int height, double,int yOffset);
     bool serialPortInit();
     void parseSerialData(const QByteArray &data);
 
@@ -46,6 +53,7 @@ private:
     QList<int> User_newdata;
     bool User_serialflag;
     QTimer *m_updateTimer;
+    QPoint m_offset;
 };
 
 #endif // ECGTEST_DIALOG_H

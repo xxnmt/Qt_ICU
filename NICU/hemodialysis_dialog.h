@@ -6,6 +6,7 @@
 #include "progressbar_round.h"
 #include "progressbar_splash.h"
 #include "serial_tool.h"
+#include <QMouseEvent>
 
 namespace Ui {
 class Hemodialysis_Dialog;
@@ -19,6 +20,7 @@ public:
     explicit Hemodialysis_Dialog(QWidget *parent = nullptr);
     ~Hemodialysis_Dialog();
     void drawRoundProgress();
+    QPoint m_offset;
 
 private slots:
     void on_btn_open_clicked();
@@ -35,6 +37,11 @@ private slots:
     void serialPortInit();
     void receiveData();
     void updateHemoProgress(QString command, int progress);
+protected:
+    // 重写鼠标事件
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
     Ui::Hemodialysis_Dialog *ui;

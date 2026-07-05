@@ -3,6 +3,7 @@
 #include <QDialog>
 #include "user_data.h"
 #include "serial_tool.h"
+#include <QMouseEvent>
 
 namespace Ui {
 class Ventilator_Dialog;
@@ -29,6 +30,8 @@ public:
     explicit Ventilator_Dialog(QWidget *parent = nullptr);
     ~Ventilator_Dialog();
 
+
+    QPoint m_offset;
     void showGif();
     void alarmLight();
     void switchMode(VentilationMode mode);
@@ -42,6 +45,11 @@ private slots:
     void updateLight();
     void receiveData();
     void on_comboBox_ventilationMode_currentIndexChanged(int index);
+protected:
+    // 重写鼠标事件
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
     Ui::Ventilator_Dialog *ui;
