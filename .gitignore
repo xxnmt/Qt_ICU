@@ -1,0 +1,34 @@
+ 
+# Qt Qmake 生成文件
+*.pro.user
+*.pro.user.*
+.qtcreator/
+.qtcreator.cache
+.qtcreator.stash
+
+# 编译输出目录
+debug/
+release/
+build-*
+
+# qmake 中间文件
+Makefile
+Makefile.*
+moc_*.cpp
+ui_*.h
+qrc_*.cpp
+
+# 二进制程序
+*.exe
+*.dll
+*.lib
+*.a
+*.pdb
+*.obj
+*.o
+
+# 临时文件
+*.log
+*.tmp
+Thumbs.db
+.DS_Store
