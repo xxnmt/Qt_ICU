@@ -1,33 +1,46 @@
- 
-# Qt Qmake 生成文件
+# Qt Creator 用户配置
+*.user
 *.pro.user
-*.pro.user.*
-.qtcreator/
+**/.qtcreator/
 .qtcreator.cache
 .qtcreator.stash
+*.autosave
 
-# 编译输出目录
-debug/
-release/
-build-*
+# 所有层级CMake/QMake构建目录
+build/
+**/build*/
+**/debug/
+**/release/
+NICU/build/
+Transmission/build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
 
-# qmake 中间文件
-Makefile
-Makefile.*
-moc_*.cpp
-ui_*.h
-qrc_*.cpp
-
-# 二进制程序
+# 编译中间产物
 *.exe
 *.dll
-*.lib
+*.so
 *.a
+*.lib
 *.pdb
 *.obj
 *.o
+moc_*.cpp
+ui_*.h
+qrc_*.cpp
+Makefile
+Makefile.*
 
-# 临时文件
+# 压缩包、安装包不入库
+*.zip
+*.rar
+*.7z
+*.msi
+
+# 系统垃圾
 *.log
 *.tmp
 Thumbs.db
